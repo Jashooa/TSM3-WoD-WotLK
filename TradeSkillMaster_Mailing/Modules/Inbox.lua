@@ -277,7 +277,14 @@ function private:InboxUpdate()
 		local isInvoice = select(4, GetInboxText(i))
 		local _, _, sender, subject, money, cod, daysLeft, hasItem = GetInboxHeaderInfo(i)
 		if isInvoice then
-			local invoiceType, itemName, playerName, bid, _, _, ahcut, _, _, _, quantity = GetInboxInvoiceInfo(i)
+            local invoiceType, itemName, playerName, bid, _, _, ahcut = GetInboxInvoiceInfo(i)
+            local quantity = 0
+            for j = 1, ATTACHMENTS_MAX_RECEIVE do
+                quantity = select(3, GetInboxItem(i, j))
+            end
+            if quantity == 0 then
+                quantity = 1
+            end
 			if invoiceType == "buyer" then
 				local itemLink = private:GetFirstInboxItemLink(i) or itemName
 				mailInfo[i] = format(L["Buy: %s (%d) | %s | %s"], itemLink, quantity, TSMAPI:MoneyToString(bid, redColor), FormatDaysLeft(daysLeft, i))
@@ -543,8 +550,15 @@ function private:PrintOpenMailMessage(index)
 	sender = sender or "?"
 	if select(4, GetInboxText(index)) then
 		-- it's an invoice
-		local invoiceType, itemName, playerName, bid, _, _, ahcut, _, _, _, quantity = GetInboxInvoiceInfo(index)
-		playerName = playerName or "?"
+		local invoiceType, itemName, playerName, bid, _, _, ahcut = GetInboxInvoiceInfo(index)
+        playerName = playerName or "?"
+        local quantity = 0
+        for j = 1, ATTACHMENTS_MAX_RECEIVE do
+            quantity = select(3, GetInboxItem(i, j))
+        end
+        if quantity == 0 then
+            quantity = 1
+        end
 		if invoiceType == "buyer" then
 			local itemLink = private:GetFirstInboxItemLink(index) or itemName
 			TSM:Printf(L["Bought %sx%d for %s from %s"], itemLink, quantity, TSMAPI:MoneyToString(bid, redColor), playerName)

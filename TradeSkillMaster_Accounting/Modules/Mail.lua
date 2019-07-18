@@ -87,7 +87,7 @@ end
 
 -- scans the mail that the player just attempted to collected (Pre-Hook)
 function Mail:ScanCollectedMail(oFunc, attempt, index, subIndex)
-	local invoiceType, itemName, buyer, bid, _, _, ahcut, _, _, _, quantity = GetInboxInvoiceInfo(index)
+	local invoiceType, itemName, buyer, bid, _, _, ahcut = GetInboxInvoiceInfo(index)
 	local sender, subject, money, codAmount, _, itemCount = select(3, GetInboxHeaderInfo(index))
 	if not subject then return end
 	local success = true
@@ -97,7 +97,15 @@ function Mail:ScanCollectedMail(oFunc, attempt, index, subIndex)
 		elseif sender == "" then
 			sender = "?"
 		end
-	end
+    end
+
+    local quantity = 0
+    for j = 1, ATTACHMENTS_MAX_RECEIVE do
+        quantity = select(3, GetInboxItem(i, j))
+    end
+    if quantity == 0 then
+        quantity = 1
+    end
 
 	if invoiceType == "seller" and buyer and buyer ~= "" then -- AH Sales
 		local daysLeft = select(7, GetInboxHeaderInfo(index))
