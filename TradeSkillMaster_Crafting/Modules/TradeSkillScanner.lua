@@ -57,7 +57,7 @@ function private.ScanCurrentProfessionThread(self, args)
 
 	-- check if we've scanned this profession successfully within the past 2 hours and it hasn't changed
 	local cacheInfo = TSM.db.factionrealm.professionScanCache[playerName .. professionName]
-	if (not IsNPCCrafting()) and cacheInfo and cacheInfo.numTradeSkills == numTradeSkills and cacheInfo.scanTime > time() - 2 * 60 * 60 then
+	if cacheInfo and cacheInfo.numTradeSkills == numTradeSkills and cacheInfo.scanTime > time() - 2 * 60 * 60 then
 		if private.scanThreadCallback then
 			private.scanThreadCallback()
 		end

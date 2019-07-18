@@ -75,7 +75,6 @@ function TradeSkill:EventHandler(event, ...)
 		private.frame.professionsTab.craftInfoFrame.buttonsFrame.inputBox:SetNumber(GetTradeskillRepeatCount())
 	elseif event == "CHAT_MSG_SKILL" then
 		-- update the skill level of the player's tradeskill
-		if IsTradeSkillGuild() or IsNPCCrafting() then return end
 		local skillName = TSM:GetCurrentProfessionName()
 		local level, maxLevel = select(2, GetTradeSkillLine())
 		local isLinked, linkedPlayer = IsTradeSkillLinked()
@@ -551,9 +550,9 @@ function private.ShowProfessionWindowThread(self)
 
 	-- check if we it's runeforging or a guild profession
 	local isLinked, linkedPlayer = IsTradeSkillLinked()
-	if TSM:GetCurrentProfessionName() == GetSpellInfo(53428) or IsTradeSkillGuild() or (isLinked and (not TSMAPI.Player:GetCharacters()[linkedPlayer] or IsNPCCrafting())) then
+	if TSM:GetCurrentProfessionName() == GetSpellInfo(53428) or (isLinked and (not TSMAPI.Player:GetCharacters()[linkedPlayer])) then
 		-- don't show the TSM_Crafting frame
-		TSM:LOG_INFO("Aborting for unsupported profession (isRuneforging=%s, isGuild=%s, linkedPlayer=%s)", TSM:GetCurrentProfessionName() == GetSpellInfo(53428), IsTradeSkillGuild(), tostring(linkedPlayer))
+		TSM:LOG_INFO("Aborting for unsupported profession (isRuneforging=%s, linkedPlayer=%s)", TSM:GetCurrentProfessionName() == GetSpellInfo(53428), tostring(linkedPlayer))
 		private.switchBtn:Hide()
 		private.noShow = nil
 		return

@@ -41,19 +41,16 @@ function private.InitializeDropdown(self, level)
 		Lib_UIDropDownMenu_AddButton(info, level)
 
 		local _, _, skillLineMaxRank = GetTradeSkillLine()
-		local isNPCCrafting = IsNPCCrafting() and skillLineMaxRank == 0
-		if (not IsTradeSkillGuild() and not isNPCCrafting) then
-			info.text = TRADESKILL_FILTER_HAS_SKILL_UP
-			info.func = function()
-				TradeSkillFrame.filterTbl.hasSkillUp  = not TradeSkillFrame.filterTbl.hasSkillUp
-				TradeSkillOnlyShowSkillUps(TradeSkillFrame.filterTbl.hasSkillUp)
-				TradeSkillUpdateFilterBar()
-			end
-			info.keepShownOnClick = true
-			info.checked = TradeSkillFrame.filterTbl.hasSkillUp
-			info.isNotRadio = true
-			Lib_UIDropDownMenu_AddButton(info, level)
-		end
+        info.text = TRADESKILL_FILTER_HAS_SKILL_UP
+        info.func = function()
+            TradeSkillFrame.filterTbl.hasSkillUp  = not TradeSkillFrame.filterTbl.hasSkillUp
+            TradeSkillOnlyShowSkillUps(TradeSkillFrame.filterTbl.hasSkillUp)
+            TradeSkillUpdateFilterBar()
+        end
+        info.keepShownOnClick = true
+        info.checked = TradeSkillFrame.filterTbl.hasSkillUp
+        info.isNotRadio = true
+        Lib_UIDropDownMenu_AddButton(info, level)
 
 		info.checked = 	nil
 		info.isNotRadio = nil
@@ -639,11 +636,7 @@ function private:UpdateProfessionDropdown()
 	private.frame.professionsTab.dropdown:SetList(list)
 	private.frame.professionsTab.dropdown:SetValue(currentSelection)
 	if not list[currentSelection] then
-		if IsNPCCrafting() then
-			private.frame.professionsTab.dropdown:SetText(format("%s - %s", professionName, playerName))
-		else
-			private.frame.professionsTab.dropdown:SetText(format("%s %d/%d - %s", professionName, level, maxLevel, playerName))
-		end
+		private.frame.professionsTab.dropdown:SetText(format("%s %d/%d - %s", professionName, level, maxLevel, playerName))
 	end
 end
 
@@ -673,9 +666,6 @@ function Professions:UpdateST()
 	local inventoryTotals = select(4, TSM:GetInventoryTotals())
 	for i = 1, GetNumTradeSkills() do
 		local skillName, skillType, numAvailable, isExpanded, _, numSkillUps, _, showProgressBar, currentRank, maxRank, _, isUnavailable, unavailableString = GetTradeSkillInfo(i)
-		if IsNPCCrafting() and skillType ~= "header" and skillType ~= "subheader" then
-			skillType = "nodifficulty"
-		end
 		TSMAPI:Assert(skillName, "No skill name found for index " .. i)
 		local spellID = TSM:GetSpellID(i)
 		local numAvailableAll, priceText = nil, nil
