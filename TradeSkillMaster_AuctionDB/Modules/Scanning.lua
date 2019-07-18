@@ -233,7 +233,7 @@ function private:ProcessScanDataThread(self, scanData, itemList)
 		for _, itemString in ipairs(itemList) do
 			scannedItems[itemString] = true
 		end
-	elseif not TSM.db.realm.hasAppData then
+	else
 		TSM.db.realm.lastCompleteScan = scanTime
 	end
 
