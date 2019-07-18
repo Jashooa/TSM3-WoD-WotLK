@@ -665,7 +665,7 @@ function Professions:UpdateST()
 	local numAvailableAllCache = {}
 	local inventoryTotals = select(4, TSM:GetInventoryTotals())
 	for i = 1, GetNumTradeSkills() do
-		local skillName, skillType, numAvailable, isExpanded, _, numSkillUps, _, showProgressBar, currentRank, maxRank, _, isUnavailable, unavailableString = GetTradeSkillInfo(i)
+		local skillName, skillType, numAvailable, isExpanded, _, numSkillUps = GetTradeSkillInfo(i)
 		TSMAPI:Assert(skillName, "No skill name found for index " .. i)
 		local spellID = TSM:GetSpellID(i)
 		local numAvailableAll, priceText = nil, nil
@@ -714,7 +714,7 @@ function Professions:UpdateST()
 
 		-- update cooldown end time
 		local cooldown = GetTradeSkillCooldown(i)
-		if not isUnavailable and craft and craft.hasCD then
+		if craft and craft.hasCD then
 			craft.cooldownTimes = craft.cooldownTimes or {}
 			craft.cooldownTimes[UnitName("player")] = craft.cooldownTimes[UnitName("player")] or {endTime=nil, prompt=nil}
 			if cooldown then
@@ -734,11 +734,7 @@ function Professions:UpdateST()
 
 		-- add text for header
 		if skillType == "header" or skillType == "subheader" then
-			if showProgressBar then
-				skillName = skillName .. " (" .. currentRank .. "/" .. maxRank .. ") " .. (isExpanded and " [-]" or " [+]")
-			else
-				skillName = skillName .. (isExpanded and " [-]" or " [+]")
-			end
+			skillName = skillName .. (isExpanded and " [-]" or " [+]")
 		end
 
 		-- add text for multiple skill-ups
@@ -778,7 +774,7 @@ function TradeSkill:UpdateSelectedTradeSkill(forceUpdate)
 	if forceUpdate or (frame.st:GetSelection() or 0) - 1 ~= TradeSkillFrame.selectedSkill then
 		frame.st:SetSelection(TradeSkillFrame.selectedSkill + 1)
 		local skillIndex = TradeSkillFrame.selectedSkill
-		local name, numAvailable, altVerb, isUnavailable, unavailableString = TSMAPI.Util:Select({ 1, 3, 5, 12, 13 }, GetTradeSkillInfo(skillIndex))
+		local name, numAvailable, altVerb = TSMAPI.Util:Select({ 1, 3, 5 }, GetTradeSkillInfo(skillIndex))
 		-- Enable display of items created
 		local lNum, hNum = GetTradeSkillNumMade(skillIndex)
 		--workaround for incorrect values returned for Temporal Crystal
@@ -805,10 +801,8 @@ function TradeSkill:UpdateSelectedTradeSkill(forceUpdate)
 		-- The code below is heavily based on the code in Blizzard_TradeSkillUI.lua
 		local toolsInfo = BuildColoredListString(GetTradeSkillTools(skillIndex))
 		frame.craftInfoFrame.infoFrame.toolsText:SetText(toolsInfo and REQUIRES_LABEL .. " " .. toolsInfo or "")
-		local cooldown, isDaily = GetTradeSkillCooldown(skillIndex)
-		if isUnavailable then
-			frame.craftInfoFrame.infoFrame.cooldownText:SetText("|cffff0000" .. unavailableString .. "|r")
-		elseif not cooldown then
+        local cooldown, isDaily = GetTradeSkillCooldown(skillIndex)
+        if not cooldown then
 			frame.craftInfoFrame.infoFrame.cooldownText:SetText("")
 		elseif cooldown > 60 * 60 * 24 then -- cooldown is greater than 1 day
 			frame.craftInfoFrame.infoFrame.cooldownText:SetText("|cffff0000" .. COOLDOWN_REMAINING .. " " .. SecondsToTime(cooldown, true, false, 1, true) .. "|r")
@@ -840,6 +834,7 @@ function TradeSkill:UpdateSelectedTradeSkill(forceUpdate)
 			frame.craftInfoFrame.buttonsFrame.createAllBtn.vellum = nil
 		end
 
+        local isUnavailable = false
 		if numAvailable > 0 and not IsTradeSkillLinked() then
 			local num = frame.craftInfoFrame.buttonsFrame.inputBox:GetNumber()
 			frame.craftInfoFrame.buttonsFrame.inputBox:SetNumber(max(min(num, numAvailable), 1))
