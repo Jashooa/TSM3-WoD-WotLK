@@ -296,27 +296,6 @@ function private.GetProfessions()
 end
 
 
--- Helper function to find spellID associated to spellname
-local function GetTradeSkillSpellID(spellName)
-    -- GetTradeSkillRecipeLink ONLY works when a trade skill window is open, but this should always happen
-    if spellName == "Smelting" then
-        spellName = "Mining"
-    end
-	for i = 1,GetNumTradeSkills() do
-		local link = GetTradeSkillRecipeLink(i)
-		if link and link:match(spellName) then -- Not a header and spell name found
-			local spellID = tonumber(link:match("enchant:(%d+)"))
-			if spellID then
-				-- print(spellID, spellName, link)
-				return spellID
-			end
-		end
-    end
-    TSM:Printf("Could not find spellID for %s", spellName)
-	return nil
-end
-
-
 function private.UpdatePlayerTradeSkillsThread(self)
 	if (select(2, GetTradeSkillInfo(1)) ~= "header") then
 		TSM:Print("Tradeskill is not fully loaded, try to scan it later.")

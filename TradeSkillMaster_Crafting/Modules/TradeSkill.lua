@@ -85,7 +85,9 @@ function TradeSkill:EventHandler(event, ...)
 			TSMAPI.Sync:KeyUpdated(TSM.db.factionrealm.playerProfessions, playerName)
 		end
 	elseif event == "UNIT_SPELLCAST_SUCCEEDED" then
-		local unit, spellID = TSMAPI.Util:Select({1, 5}, ...)
+        --local unit, spellID = TSMAPI.Util:Select({1, 5}, ...)
+        local unit, spellName = ...
+        local spellID = TradeSkill:GetSpellID(spellName)
 		if unit ~= "player" or not TSM.db.factionrealm.crafts[spellID] then return end
 		if not TradeSkill.isCrafting or TradeSkill.isCrafting.spellID ~= spellID then return end
 		-- remove one from the queue
@@ -95,7 +97,9 @@ function TradeSkill:EventHandler(event, ...)
 		end
 		TradeSkill.isCrafting.quantity = TradeSkill.isCrafting.quantity - 1
 	elseif event == "UNIT_SPELLCAST_INTERRUPTED" or event == "UNIT_SPELLCAST_FAILED" or event == "UNIT_SPELLCAST_FAILED_QUIET" then
-		local unit, spellID = TSMAPI.Util:Select({1, 5}, ...)
+        --local unit, spellID = TSMAPI.Util:Select({1, 5}, ...)
+        local unit, spellName = ...
+        local spellID = TradeSkill:GetSpellID(spellName)
 		if unit ~= "player" then return end
 
 		if TradeSkill.isCrafting and spellID == TradeSkill.isCrafting.spellID then
@@ -123,6 +127,24 @@ function TradeSkill:GetVisibilityInfo()
 	return result
 end
 
+local function TradeSkill:GetSpellID(spellName)
+    -- ONLY works when a trade skill window is open, but this should always happen
+    if spellName == "Smelting" then
+        spellName = "Mining"
+    end
+	for i = 1,GetNumTradeSkills() do
+		local link = GetTradeSkillRecipeLink(i)
+		if link and link:match(spellName) then -- Not a header and spell name found
+			local spellID = tonumber(link:match("enchant:(%d+)"))
+			if spellID then
+				-- print(spellID, spellName, link)
+				return spellID
+			end
+		end
+    end
+    TSM:Printf("Could not find spellID for %s", spellName)
+	return nil
+end
 
 
 -- ============================================================================
