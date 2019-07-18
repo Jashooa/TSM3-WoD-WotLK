@@ -40,7 +40,7 @@ TSM = {
 	},
 	money = {
 		income = {
-			-- Possible keys: Transfer, Garrison
+			-- Possible keys: Transfer
 			{key="...", copper=#, time=#, player="...", otherPlayer="..."},
 		},
 		expense = {
@@ -80,7 +80,7 @@ function private:LoadItemRecords(csvData, recordType, key)
 	for _, record in ipairs(select(2, LibParse:CSVDecode(csvData)) or {}) do
 		local itemString = TSMAPI.Item:ToItemString(record.itemString)
 		if itemString and type(record.time) == "number" then
-			local itemName = TSM:GetItemName(itemString) or TSMAPI.Item:GetInfo(itemString) 
+			local itemName = TSM:GetItemName(itemString) or TSMAPI.Item:GetInfo(itemString)
 			record.key = key or record.source or "Auction"
 			private:CleanRecord(record)
 			if saveTimes and (record.key == "Auction" or record.key == "Expire" or record.key == "Cancel") then
@@ -101,7 +101,7 @@ function private:LoadMoneyRecords(csvData, recordType)
 	TSM.money[recordType] = {}
 	local typeTranslation = {}
 	if recordType == "income" then
-		typeTranslation = {["Money Transfer"]="Transfer", ["Garrison"]="Garrison"}
+		typeTranslation = {["Money Transfer"]="Transfer"}
 	elseif recordType == "expense" then
 		typeTranslation = {["Money Transfer"]="Transfer", ["Postage"]="Postage", ["Repair Bill"]="Repair"}
 	end
@@ -193,7 +193,7 @@ function private:InsertMoneyRecord(dataType, newRecord)
 end
 function Data:InsertMoneyIncomeRecord(key, copper, destination, timeStamp)
 	if not (key and copper and destination and copper > 0) then return end
-	if key ~= "Transfer" and key ~= "Garrison" then return end
+	if key ~= "Transfer" then return end
 	private:InsertMoneyRecord("income", {key=key, copper=copper, otherPlayer=destination, time=timeStamp})
 end
 function Data:InsertMoneyExpenseRecord(key, copper, destination, timeStamp)

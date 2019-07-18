@@ -331,11 +331,6 @@ function TSM:OnTSMDBShutdown()
 			record.source = record.otherPlayer
 			record.amount = record.copper
 			tinsert(income, record)
-		elseif record.key == "Garrison" then
-			record.type = "Garrison"
-			record.source = "Mission"
-			record.amount = record.copper
-			tinsert(income, record)
 		end
 	end
 	TSM.db.realm.csvIncome = LibParse:CSVEncode(TSM.INCOME_KEYS, income)

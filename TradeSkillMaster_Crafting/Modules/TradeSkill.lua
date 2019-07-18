@@ -24,7 +24,6 @@ function TradeSkill:OnInitialize()
 	end
 	TradeSkill:RegisterEvent("TRADE_SKILL_SHOW", "EventHandler")
 	TradeSkill:RegisterEvent("TRADE_SKILL_CLOSE", "EventHandler")
-	TradeSkill:RegisterEvent("GARRISON_TRADESKILL_NPC_CLOSED", "EventHandler")
 	TradeSkill:RegisterEvent("TRADE_SKILL_UPDATE", "EventHandler")
 	TradeSkill:RegisterEvent("TRADE_SKILL_FILTER_UPDATE", "EventHandler")
 	TradeSkill:RegisterEvent("UPDATE_TRADESKILL_RECAST", "EventHandler")
@@ -54,7 +53,7 @@ function TradeSkill:EventHandler(event, ...)
 			TSMAPI.Threading:Run(private.showThreadId)
 		end
 		return
-	elseif event == "TRADE_SKILL_CLOSE" or event == "GARRISON_TRADESKILL_NPC_CLOSED" then
+	elseif event == "TRADE_SKILL_CLOSE" then
 		TradeSkill.HideTradeSkill("EVENT")
 		return
 	end
@@ -557,11 +556,11 @@ function private.ShowProfessionWindowThread(self)
 		private.frame:Hide()
 		private.noHide = nil
 	end
-	
+
 	-- create the switch button if it doesn't exist and then show it
 	private:CreateSwitchButton()
 	private.switchBtn:Show()
-		
+
 	-- check if we it's runeforging or a guild profession
 	local isLinked, linkedPlayer = IsTradeSkillLinked()
 	if TSM:GetCurrentProfessionName() == GetSpellInfo(53428) or IsTradeSkillGuild() or (isLinked and (not TSMAPI.Player:GetCharacters()[linkedPlayer] or IsNPCCrafting())) then
@@ -666,7 +665,6 @@ function TradeSkill.HideTradeSkill(source)
 		private.frame:Hide()
 	elseif source == TradeSkillFrame then
 		CloseTradeSkill()
-		C_Garrison.CloseGarrisonTradeskillNPC()
 	else
 		TSMAPI:Assert(false, "Window was hidden from an unexpected source: "..tostring(source))
 	end

@@ -77,7 +77,7 @@ function Revenue:Draw(container)
 		if value == 1 then
 			TSM.Viewer:GetItemFiltersInfo(self, "sales", {"Auction", "COD", "Trade", "Vendor"}, private.GetSaleSTData, ITEM_SELL_BUY_ST_COLS, 1, value)
 		elseif value == 2 then
-			TSM.Viewer:GetMoneyFiltersInfo(self, "income", {"Transfer", "Garrison"}, private.GetIncomeSTData, ITEM_MONEY_ST_COLS, 1, value)
+			TSM.Viewer:GetMoneyFiltersInfo(self, "income", {"Transfer"}, private.GetIncomeSTData, ITEM_MONEY_ST_COLS, 1, value)
 		elseif value == 3 then
 			local stCols = TSM.db.global.priceFormat == "avg" and ITEM_RESALE_ST_COLS_AVG or ITEM_RESALE_ST_COLS_TOTAL
 			TSM.Viewer:GetItemFiltersInfo(self, "resale", {"Auction", "COD", "Trade", "Vendor"}, private.GetResaleSTData, stCols, 1, value)

@@ -65,7 +65,7 @@ TSM.operationDefaults = operationDefaults
 function TSM:OnInitialize()
 	-- load settings
 	TSM.db = TSMAPI.Settings:Init("TradeSkillMaster_CraftingDB", settingsInfo)
-	
+
 	-- create shortcuts to TradeSkillMaster_Crafting's modules
 	for moduleName, module in pairs(TSM.modules) do
 		TSM[moduleName] = module
@@ -336,9 +336,6 @@ end
 
 function TSM:GetCurrentProfessionName()
 	local name = GetTradeSkillLine()
-	if IsNPCCrafting() and name ~= "UNKNOWN" then
-		return name .. L[" (Garrison)"]
-	end
 	return name
 end
 

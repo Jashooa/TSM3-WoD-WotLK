@@ -23,7 +23,6 @@ Locale\ptBR.lua
 
 TradeSkillMaster_Accounting.lua
 Modules\ItemCache.lua
-Modules\Garrison.lua
 Modules\GoldTracker.lua
 Modules\Mail.lua
 Modules\Merchant.lua
