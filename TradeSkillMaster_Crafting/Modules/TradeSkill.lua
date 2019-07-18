@@ -127,7 +127,7 @@ function TradeSkill:GetVisibilityInfo()
 	return result
 end
 
-local function TradeSkill:GetSpellID(spellName)
+function TradeSkill:GetSpellID(spellName)
     -- ONLY works when a trade skill window is open, but this should always happen
     if spellName == "Smelting" then
         spellName = "Mining"
