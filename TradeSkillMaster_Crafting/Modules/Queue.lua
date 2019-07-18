@@ -120,7 +120,6 @@ function Queue:DoRestock(groupInfo)
 							if ignored then
 								ignoredQty = ignoredQty + TSMAPI.Inventory:GetBagQuantity(itemString, player)
 								ignoredQty = ignoredQty + TSMAPI.Inventory:GetBankQuantity(itemString, player)
-								ignoredQty = ignoredQty + TSMAPI.Inventory:GetReagentBankQuantity(itemString, player)
 								ignoredQty = ignoredQty + TSMAPI.Inventory:GetAuctionQuantity(itemString, player)
 								ignoredQty = ignoredQty + TSMAPI.Inventory:GetMailQuantity(itemString, player)
 							end

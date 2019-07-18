@@ -124,7 +124,7 @@ function Queue:GetFrameInfo()
 					GameTooltip:AddLine(L["Profit (Total Profit):"] .. " " .. (TSMAPI:MoneyToString(profit, color) or "---") .. "(" .. (TSMAPI:MoneyToString(totalProfit, color) or "---") .. ")")
 					for itemString, matQuantity in pairs(TSM.db.factionrealm.crafts[data.spellID].mats) do
 						local name = TSMAPI.Item:GetInfo(itemString) or (TSM.db.factionrealm.mats[itemString] and TSM.db.factionrealm.mats[itemString].name) or "?"
-						local inventory = TSMAPI.Inventory:GetBagQuantity(itemString) + TSMAPI.Inventory:GetReagentBankQuantity(itemString)
+						local inventory = TSMAPI.Inventory:GetBagQuantity(itemString)
 						local need = matQuantity * data.numQueued
 						local color
 						if inventory >= need then color = "|cff00ff00" else color = "|cffff0000" end
@@ -380,7 +380,7 @@ function Queue:Update()
 		local numNeeded = max(quantity - TSMAPI.Inventory:GetTotalQuantity(itemString), 0)
 		local color, order
 		if numNeeded == 0 then
-			local bagQty = TSMAPI.Inventory:GetBagQuantity(itemString) + TSMAPI.Inventory:GetReagentBankQuantity(itemString)
+			local bagQty = TSMAPI.Inventory:GetBagQuantity(itemString)
 			if bagQty >= quantity then
 				color = "|cff00ff00"
 				order = 1

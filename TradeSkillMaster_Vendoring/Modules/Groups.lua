@@ -280,7 +280,7 @@ function private.BuyThread(self)
 							local numHave = inventoryItems[itemString] or 0
 
 							if operation.restockSources.bank then
-								numHave = numHave + TSMAPI.Inventory:GetBankQuantity(itemString) + TSMAPI.Inventory:GetReagentBankQuantity(itemString)
+								numHave = numHave + TSMAPI.Inventory:GetBankQuantity(itemString)
 							end
 
 							if operation.restockSources.guild then

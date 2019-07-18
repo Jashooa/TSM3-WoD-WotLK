@@ -46,11 +46,6 @@ function Mover:OnEnable()
 
 	TSM:RegisterEvent("BANKFRAME_OPENED", function(event)
 		private.bankType = "Bank"
-		--workaround for blizzard bug if using default bank frame and you dont click the reagent bank tab while pulling stuff from the reagent bank
-		if IsReagentBankUnlocked() and ReagentBankFrame and BankFrame:IsVisible() then
-			BankFrameTab2:Click()
-			BankFrameTab1:Click()
-		end
 	end)
 
 	TSM:RegisterEvent("GUILDBANKFRAME_CLOSED", function(event, addon)
@@ -176,10 +171,6 @@ function private.getContainerTableThread(self, cnt)
 	if cnt == "Bank" then
 		local numSlots, _ = GetNumBankSlots()
 		local maxSlot, increment = 1, 3
-		if IsReagentBankUnlocked() then
-			maxSlot = 2
-			increment = 2
-		end
 
 		for i = 1, numSlots + maxSlot do
 			if i == 1 then
@@ -249,27 +240,20 @@ end
 function private.canGoInBagThread(self, itemLink, destTable, isCraftingReagent)
 	local itemFamily = GetItemFamily(TSMAPI.Item:ToItemID(itemLink)) or 0
 	local default
-	if isCraftingReagent and IsReagentBankUnlocked() then
-		if private.GetEmptySlotCountThread(self, REAGENTBANK_CONTAINER) then
-			return REAGENTBANK_CONTAINER
-		end
-	end
 	for _, bag in pairs(destTable) do
-		if bag ~= REAGENTBANK_CONTAINER then
-			local bagFamily = GetItemFamily(GetBagName(bag)) or 0
-			if itemFamily and bagFamily and bagFamily > 0 and bit.band(itemFamily, bagFamily) > 0 then
-				if private.GetEmptySlotCountThread(self, bag) then
-					return bag
-				end
-			elseif bagFamily == 0 then
-				if private.GetEmptySlotCountThread(self, bag) then
-					if not default then
-						default = bag
-					end
-				end
-			end
-			self:Yield()
-		end
+        local bagFamily = GetItemFamily(GetBagName(bag)) or 0
+        if itemFamily and bagFamily and bagFamily > 0 and bit.band(itemFamily, bagFamily) > 0 then
+            if private.GetEmptySlotCountThread(self, bag) then
+                return bag
+            end
+        elseif bagFamily == 0 then
+            if private.GetEmptySlotCountThread(self, bag) then
+                if not default then
+                    default = bag
+                end
+            end
+        end
+        self:Yield()
 	end
 	return default
 end
@@ -478,9 +462,6 @@ function private.generateMovesThread(self)
 			if TSM.db.profile.cleanBank then
 				SortBankBags()
 			end
-			if TSM.db.profile.cleanReagentBank and IsReagentBankUnlocked() then
-				SortReagentBankBags()
-			end
 		end
 		if TSM.db.profile.cleanBags then
 			SortBags()
@@ -558,14 +539,6 @@ function private.doTheMoveThread(self, source, destination, bag, slot, destBag, 
 			TSM:LOG_WARN("Pickup Item failed cursor not empty: %s %s bag=%s slot=%s", tostring(source), tostring(TSMAPI.Item:GetInfo(itemLink) or "None"), tostring(bag), tostring(slot))
 		elseif split then
 			private.splitContainerItemSrc(bag, slot, need)
-			if GetCursorInfo() == "item" then
-				private.pickupContainerItemDest(destBag, destSlot)
-				moved = true
-			else
-				TSM:LOG_WARN("Pickup Item failed from: %s %s bag=%s slot=%s", tostring(source), tostring(TSMAPI.Item:GetInfo(itemLink) or "None"), tostring(bag), tostring(slot))
-			end
-		elseif destBag == REAGENTBANK_CONTAINER then
-			private.pickupContainerItemSrc(bag, slot)
 			if GetCursorInfo() == "item" then
 				private.pickupContainerItemDest(destBag, destSlot)
 				moved = true

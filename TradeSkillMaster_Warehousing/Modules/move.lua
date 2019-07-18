@@ -80,10 +80,6 @@ function move:getContainerTable(cnt)
 	if cnt == "bank" then
 		local numSlots, _ = GetNumBankSlots()
 		local maxSlot, increment = 1, 3
-		if IsReagentBankUnlocked() then
-			maxSlot = 2
-			increment = 2
-		end
 
 		for i = 1, numSlots + maxSlot do
 			if i == 1 then

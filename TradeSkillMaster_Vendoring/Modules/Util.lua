@@ -98,7 +98,7 @@ function Util:GetMaxAfford(index)
 
 				if costItemLink then
 					local costItemString = TSMAPI.Item:ToItemString(costItemLink)
-					costNumHave = TSMAPI.Inventory:GetBagQuantity(costItemString) + TSMAPI.Inventory:GetBankQuantity(costItemString) + TSMAPI.Inventory:GetReagentBankQuantity(costItemString)
+					costNumHave = TSMAPI.Inventory:GetBagQuantity(costItemString) + TSMAPI.Inventory:GetBankQuantity(costItemString)
 				else
 					local currency = Util.Currencies[costTexture]
 
@@ -129,10 +129,10 @@ function Util:GetMaxFit(index)
 
 	for bag = 0, NUM_BAG_SLOTS do
 		if TSMAPI.Inventory:ItemWillGoInBag(itemLink, bag) then
-			for slot = 1, GetContainerNumSlots(bag) do			
+			for slot = 1, GetContainerNumSlots(bag) do
 				local iString = TSMAPI.Item:ToItemString(GetContainerItemLink(bag, slot))
 				if iString == itemString then
-					local stackSize = select(2, GetContainerItemInfo(bag, slot))				
+					local stackSize = select(2, GetContainerItemInfo(bag, slot))
 					maxFit = maxFit + (maxStackSize - stackSize)
 				elseif not iString then
 					maxFit = maxFit + maxStackSize

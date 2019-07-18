@@ -138,7 +138,7 @@ function private:StartGroupScan(groupTree)
 						-- include mail and bags
 						local numHave = TSMAPI.Inventory:GetBagQuantity(itemString) + TSMAPI.Inventory:GetMailQuantity(itemString)
 						if opSettings.restockSources.bank then
-							numHave = numHave + TSMAPI.Inventory:GetBankQuantity(itemString) + TSMAPI.Inventory:GetReagentBankQuantity(itemString)
+							numHave = numHave + TSMAPI.Inventory:GetBankQuantity(itemString)
 						end
 						if opSettings.restockSources.guild then
 							numHave = numHave + TSMAPI.Inventory:GetGuildQuantity(itemString)

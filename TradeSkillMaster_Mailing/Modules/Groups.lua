@@ -193,7 +193,7 @@ function Groups:GetTargetQuantity(player, itemString, sources)
 			num = num + TSMAPI.Inventory:GetGuildQuantity(itemString, TSMAPI.Player:GetPlayerGuild(player))
 		end
 		if sources.bank then
-			num = num + TSMAPI.Inventory:GetBankQuantity(itemString, player) + TSMAPI.Inventory:GetReagentBankQuantity(itemString, player)
+			num = num + TSMAPI.Inventory:GetBankQuantity(itemString, player)
 		end
 	end
 	return num

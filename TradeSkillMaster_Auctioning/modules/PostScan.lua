@@ -150,7 +150,7 @@ function private:HasEnoughToPost(itemString, operation, numHave)
 	local perAuctionIsCap = operation.stackSizeIsCap
 	local keepQuantity = operation.keepQuantity
 	if operation.keepQtySources.bank then
-		keepQuantity = keepQuantity - TSMAPI.Inventory:GetBankQuantity(itemString) - TSMAPI.Inventory:GetReagentBankQuantity(itemString)
+		keepQuantity = keepQuantity - TSMAPI.Inventory:GetBankQuantity(itemString)
 	end
 	if operation.keepQtySources.guild then
 		keepQuantity = keepQuantity - TSMAPI.Inventory:GetGuildQuantity(itemString)
@@ -341,7 +341,7 @@ function private:ProcessItem(itemString, queueIndex)
 	for _, operation in ipairs(TSM.operationLookup[itemString]) do
 		local keepQuantity = operation.keepQuantity
 		if operation.keepQtySources.bank then
-			keepQuantity = keepQuantity - TSMAPI.Inventory:GetBankQuantity(itemString) - TSMAPI.Inventory:GetReagentBankQuantity(itemString)
+			keepQuantity = keepQuantity - TSMAPI.Inventory:GetBankQuantity(itemString)
 		end
 		if operation.keepQtySources.guild then
 			keepQuantity = keepQuantity - TSMAPI.Inventory:GetGuildQuantity(itemString)

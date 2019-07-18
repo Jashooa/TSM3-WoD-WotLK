@@ -344,7 +344,7 @@ function Util:groupTree(grpInfo, src, all, ah, maxExpired)
 										if src == "guildbank" then
 											if opSettings.keepQtySources.guild then
 												if opSettings.keepQtySources.bank then
-													availQty = availQty + TSMAPI.Inventory:GetBankQuantity(itemString) + TSMAPI.Inventory:GetReagentBankQuantity(itemString)
+													availQty = availQty + TSMAPI.Inventory:GetBankQuantity(itemString)
 												end
 												availQty = availQty - opSettings.keepQuantity
 											end

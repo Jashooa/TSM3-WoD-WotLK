@@ -114,7 +114,6 @@ local settingsInfo = {
 		operationTooltips = { type = "table", default = {}, lastModifiedVersion = 1 },
 		cleanBags = { type = "boolean", default = false, lastModifiedVersion = 1 },
 		cleanBank = { type = "boolean", default = false, lastModifiedVersion = 1 },
-		cleanReagentBank = { type = "boolean", default = false, lastModifiedVersion = 1 },
 		minimapIcon = { type = "table", default = { hide = false, minimapPos = 220, radius = 80 }, lastModifiedVersion = 1 },
 		destroyValueSource = { type = "string", default = "dbmarket", lastModifiedVersion = 1 },
 		tooltipShowModifier = { type = "string", default = "none", lastModifiedVersion = 1 },
@@ -621,11 +620,11 @@ function TSM:LoadTooltip(itemString, quantity, moneyCoins, lines)
 		local totalNum = 0
 		local playerData, guildData = TSM.Inventory:GetItemData(itemString)
 		for playerName, data in pairs(playerData) do
-			local playerTotal = data.bag + data.bank + data.reagentBank + data.auction + data.mail
+			local playerTotal = data.bag + data.bank + data.auction + data.mail
 			if playerTotal > 0 then
 				totalNum = totalNum + playerTotal
 				local classColor = type(TSM.db.factionrealm.characters[playerName]) == "string" and RAID_CLASS_COLORS[TSM.db.factionrealm.characters[playerName]]
-				local rightText = format(L["%s (%s bags, %s bank, %s AH, %s mail)"], "|cffffffff"..playerTotal.."|r", "|cffffffff"..data.bag.."|r", "|cffffffff"..(data.bank+data.reagentBank).."|r", "|cffffffff"..data.auction.."|r", "|cffffffff"..data.mail.."|r")
+				local rightText = format(L["%s (%s bags, %s bank, %s AH, %s mail)"], "|cffffffff"..playerTotal.."|r", "|cffffffff"..data.bag.."|r", "|cffffffff"..(data.bank).."|r", "|cffffffff"..data.auction.."|r", "|cffffffff"..data.mail.."|r")
 				if classColor then
 					tinsert(lines, {left="    |c"..classColor.colorStr..playerName.."|r:", right=rightText})
 				else
@@ -648,10 +647,10 @@ function TSM:LoadTooltip(itemString, quantity, moneyCoins, lines)
 		local playerData, guildData = TSM.Inventory:GetItemData(itemString)
 		for playerName, data in pairs(playerData) do
 			if playerName == UnitName("player") then
-				totalPlayer = totalPlayer + data.bag + data.bank + data.reagentBank + data.mail
+				totalPlayer = totalPlayer + data.bag + data.bank + data.mail
 				totalAuction = totalAuction + data.auction
 			else
-				totalAlt = totalAlt + data.bag + data.bank + data.reagentBank + data.mail
+				totalAlt = totalAlt + data.bag + data.bank + data.mail
 				totalAuction = totalAuction + data.auction
 			end
 		end

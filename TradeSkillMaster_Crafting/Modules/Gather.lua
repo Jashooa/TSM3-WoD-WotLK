@@ -220,7 +220,7 @@ function Gather:GetItemSources(crafter, neededMats)
 		-- query item info as early as possible
 		TSMAPI.Item:QueryInfo(itemString)
 		if TSMAPI.Item:GetVendorCost(itemString) then
-			local vendorNeed = quantity - (TSMAPI.Inventory:GetBagQuantity(itemString, crafter) + TSMAPI.Inventory:GetBankQuantity(itemString, crafter) + TSMAPI.Inventory:GetReagentBankQuantity(itemString, crafter) + TSMAPI.Inventory:GetMailQuantity(itemString, crafter))
+			local vendorNeed = quantity - (TSMAPI.Inventory:GetBagQuantity(itemString, crafter) + TSMAPI.Inventory:GetBankQuantity(itemString, crafter) + TSMAPI.Inventory:GetMailQuantity(itemString, crafter))
 			if vendorNeed > 0 then
 				sources[itemString] = sources[itemString] or {}
 				sources[itemString]["vendorBuy"] = sources[itemString]["vendorBuy"] or {}
@@ -294,9 +294,6 @@ function Gather:GetItemSources(crafter, neededMats)
 	local shortItems = {}
 	for itemString, quantity in pairs(neededMats) do
 		local numHave = TSMAPI.Inventory:GetBagQuantity(itemString, crafter)
-		if not mustHaveBags[itemString] then -- you need the item in your bags
-		numHave = numHave + TSMAPI.Inventory:GetReagentBankQuantity(itemString, crafter)
-		end
 		if quantity > numHave then
 			shortItems[itemString] = quantity - numHave
 		end
@@ -314,7 +311,7 @@ function Gather:GetItemSources(crafter, neededMats)
 			local bagItems = {}
 
 			for itemString in pairs(neededMats) do
-				if (TSMAPI.Inventory:GetBankQuantity(itemString, player) > 0 or TSMAPI.Inventory:GetReagentBankQuantity(itemString, player) > 0) and shortItems[itemString] then
+				if (TSMAPI.Inventory:GetBankQuantity(itemString, player) > 0) and shortItems[itemString] then
 					if shortItems[itemString] - TSMAPI.Inventory:GetMailQuantity(itemString, crafter) - (player ~= crafter and TSMAPI.Inventory:GetBagQuantity(itemString, player) or 0) > 0 then
 						if TSMAPI.Item:IsSoulboundMat(itemString) then
 							if player == crafter then
@@ -322,9 +319,6 @@ function Gather:GetItemSources(crafter, neededMats)
 							end
 						else
 							bankItems[itemString] = TSMAPI.Inventory:GetBankQuantity(itemString, player)
-							if player ~= crafter or mustHaveBags[itemString] then
-								bankItems[itemString] = bankItems[itemString] + TSMAPI.Inventory:GetReagentBankQuantity(itemString, player)
-							end
 						end
 						if bankItems[itemString] and bankItems[itemString] > 0 then
 							sources[itemString] = sources[itemString] or {}
