@@ -185,7 +185,7 @@ function TSMAPI.Item:IsSoulbound(...)
 		local itemID = GetContainerItemID(bag, slot)
 		local maxCharges
 		if itemID then
-			TSMScanTooltip:SetItemByID(itemID)
+			TSMScanTooltip:SetHyperlink("item:"..itemID)
 			maxCharges = private:GetTooltipCharges(TSMScanTooltip)
 		end
 		if bag == -1 then
