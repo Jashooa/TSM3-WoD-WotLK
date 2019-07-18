@@ -185,7 +185,7 @@ function TSM:OnInitialize()
 		end
 
 		-- fix some bad variant itemStrings (fixed in 3.3.8)
-		wipe(toFix)
+		local toFix = {}
 		for itemString, groupPath in pairs(TSM.db.profile.items) do
 			local itemId = TSMAPI.Item:ToItemID(itemString)
 			if itemId and itemId < 105000 and strmatch(itemString, "^i:[0-9]+:[%-0-9]+:") then
