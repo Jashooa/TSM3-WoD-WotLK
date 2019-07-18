@@ -58,7 +58,7 @@ function private:OnAuctionOwnedListUpdate()
 	for i = 1, GetNumAuctionItems("owner") do
 		local link = GetAuctionItemLink("owner", i)
 		local itemString = TSMAPI.Item:ToItemString(link)
-		local name, stackSize, buyout, wasSold = TSMAPI.Util:Select({1, 3, 10, 16}, GetAuctionItemInfo("owner", i))
+		local name, stackSize, buyout, wasSold = TSMAPI.Util:Select({1, 3, 9, 13}, GetAuctionItemInfo("owner", i))
 		if wasSold == 0 and itemString then
 			if buyout and buyout > 0 then
 				auctionPrices[link] = auctionPrices[link] or { name = name }
@@ -95,7 +95,7 @@ end
 
 function private.OnAuctionBidPlaced(_, index, amountPaid)
 	local link = GetAuctionItemLink("list", index)
-	local name, stackSize, buyout = TSMAPI.Util:Select({1, 3, 10}, GetAuctionItemInfo("list", index))
+	local name, stackSize, buyout = TSMAPI.Util:Select({1, 3, 9}, GetAuctionItemInfo("list", index))
 	if amountPaid == buyout then
 		private.lastPurchase = {name=name, link=link, stackSize=stackSize, buyout=buyout, buyout=buyout}
 	end

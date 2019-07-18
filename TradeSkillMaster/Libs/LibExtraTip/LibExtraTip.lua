@@ -999,7 +999,7 @@ function lib:GenerateTooltipMethodTable() -- Sets up hooks to give the quantity 
 			OnTooltipCleared(self)
 			local reg = tooltipRegistry[self]
 			reg.ignoreOnCleared = true
-			local _,_,q,_,cu,_,_,minb,inc,bo,ba,hb,_,own,ownf = GetAuctionItemInfo(type,index)
+			local _,_,q,_,cu,_,minb,inc,bo,ba,hb,own = GetAuctionItemInfo(type,index)
 			reg.quantity = q
 			reg.additional.event = "SetAuctionItem"
 			reg.additional.eventType = type
@@ -1011,7 +1011,6 @@ function lib:GenerateTooltipMethodTable() -- Sets up hooks to give the quantity 
 			reg.additional.bidAmount = ba
 			reg.additional.highBidder = hb
 			reg.additional.owner = own
-			reg.additional.ownerFull = ownf
 			reg.item = GetAuctionItemLink(type,index) -- Workaround [LTT-56], Remove when fixed by Blizzard
 		end,
 

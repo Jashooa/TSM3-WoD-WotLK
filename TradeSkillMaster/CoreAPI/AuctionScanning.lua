@@ -40,11 +40,11 @@ function TSMAPI.Auction:ScanQuery(module, query, callbackHandler, resolveSellers
 		private.optimize = true
 	end
 	TSM:SetAuctionTabFlashing(private.currentModule, true)
-	
+
 	-- set up the query
 	query.resolveSellers = resolveSellers
 	query.page = 0
-	
+
 	-- sort by bid and then buyout
 	SortAuctionItems("list", "bid")
 	if IsAuctionSortReversed("list", "bid") then
@@ -54,7 +54,7 @@ function TSMAPI.Auction:ScanQuery(module, query, callbackHandler, resolveSellers
 	if IsAuctionSortReversed("list", "buyout") then
 		SortAuctionItems("list", "buyout")
 	end
-	
+
 	private.scanThreadId = TSMAPI.Threading:Start(private.ScanAllPagesThread, SCAN_THREAD_PRIORITY, private.ScanThreadDone, query)
 end
 
@@ -72,10 +72,10 @@ function TSMAPI.Auction:ScanLastPage(module, callbackHandler, database)
 	private.database = database
 	private.currentModule = module
 	TSM:SetAuctionTabFlashing(private.currentModule, true)
-	
+
 	-- clear the auction sort
 	SortAuctionClearSort("list")
-	
+
 	private.scanThreadId = TSMAPI.Threading:Start(private.ScanLastPageThread, SCAN_THREAD_PRIORITY, private.ScanThreadDone)
 end
 
@@ -92,7 +92,7 @@ function TSMAPI.Auction:GetAllScan(module, callbackHandler)
 	private.callbackHandler = callbackHandler
 	private.currentModule = module
 	TSM:SetAuctionTabFlashing(private.currentModule, true)
-	
+
 	private.scanThreadId = TSMAPI.Threading:Start(private.GetAllScanThread, SCAN_THREAD_PRIORITY, private.ScanThreadDone)
 end
 
@@ -111,7 +111,7 @@ function TSMAPI.Auction:FindAuction(module, targetInfo, callbackHandler, databas
 	private.database = database
 	private.currentModule = module
 	TSM:SetAuctionTabFlashing(private.currentModule, true)
-	
+
 	-- sort by bid and then buyout
 	SortAuctionItems("list", "bid")
 	if IsAuctionSortReversed("list", "bid") then
@@ -121,14 +121,14 @@ function TSMAPI.Auction:FindAuction(module, targetInfo, callbackHandler, databas
 	if IsAuctionSortReversed("list", "buyout") then
 		SortAuctionItems("list", "buyout")
 	end
-	
+
 	private.scanThreadId = TSMAPI.Threading:Start(private.FindAuctionThread, SCAN_THREAD_PRIORITY, private.ScanThreadDone, targetInfo)
 end
 
 function TSMAPI.Auction:FindAuctionNoScan(targetInfo)
 	TSMAPI:Assert(type(targetInfo) == "table", "Invalid targetInfo type: "..type(targetInfo))
 	TSMAPI:Assert(AuctionFrame:IsVisible())
-	
+
 	local keys = {"itemString", "stackSize", "displayBid", "buyout", "seller"}
 	for i=#keys, 1, -1 do
 		if not targetInfo[keys[i]] then
@@ -147,7 +147,7 @@ function TSMAPI.Auction:StopScan(module)
 		private:DoCallback("INTERRUPTED")
 		TSMAPI.Threading:Kill(private.scanThreadId)
 	end
-	
+
 	TSM:SetAuctionTabFlashing(private.currentModule, false) -- stop flashing the tab of the current module
 	private.currentModule = nil
 	private.optimize = nil
@@ -227,8 +227,8 @@ end
 -- ============================================================================
 
 function private:IsTargetAuction(index, targetInfo, keys)
-	local stackSize, minBid, buyout, bid, seller, seller_full = TSMAPI.Util:Select({3, 8, 10, 11, 14, 15}, GetAuctionItemInfo("list", index))
-	seller = TSM:GetAuctionPlayer(seller, seller_full)
+	local stackSize, minBid, buyout, bid, seller = TSMAPI.Util:Select({3, 7, 9, 10, 12}, GetAuctionItemInfo("list", index))
+	seller = TSM:GetAuctionPlayer(seller)
 	local displayedBid = bid == 0 and minBid or bid
 	local itemString = TSMAPI.Item:ToItemString(GetAuctionItemLink("list", index))
 	local auctionData = {itemString=itemString, stackSize=stackSize, displayedBid=displayedBid, buyout=buyout, seller=seller}
@@ -243,13 +243,13 @@ function private:IsAuctionPageValid(resolveSellers)
 		return false, true
 	end
 	if numAuctions == 0 then return true end
-	
+
 	local numLinks, prevLink = 0, nil
 	for i=1, numAuctions do
 		-- checks to make sure all the data has been sent to the client
 		-- if not, the data is bad and we'll wait / try again
-		local stackSize, minBid, minIncrement, buyout, bid, highBidder, seller, seller_full = TSMAPI.Util:Select({3, 8, 9, 10, 11, 12, 14, 15}, GetAuctionItemInfo("list", i))
-		seller = TSM:GetAuctionPlayer(seller, seller_full)
+		local stackSize, minBid, minIncrement, buyout, bid, highBidder, seller = TSMAPI.Util:Select({3, 7, 8, 9, 10, 11, 12}, GetAuctionItemInfo("list", i))
+		seller = TSM:GetAuctionPlayer(seller)
 		local timeLeft = GetAuctionItemTimeLeft("list", i)
 		local link = GetAuctionItemLink("list", i)
 		local itemString = TSMAPI.Item:ToItemString(link)
@@ -264,11 +264,11 @@ function private:IsAuctionPageValid(resolveSellers)
 end
 
 function private:GetAuctionRecord(index)
-	local name, texture, stackSize, minBid, minIncrement, buyout, bid, highBidder, seller, seller_full = TSMAPI.Util:Select({1, 2, 3, 8, 9, 10, 11, 12, 14, 15}, GetAuctionItemInfo("list", index))
+	local name, texture, stackSize, minBid, minIncrement, buyout, bid, highBidder, seller = TSMAPI.Util:Select({1, 2, 3, 7, 8, 9, 10, 11, 12}, GetAuctionItemInfo("list", index))
 	local timeLeft = GetAuctionItemTimeLeft("list", index)
 	local rawLink = GetAuctionItemLink("list", index)
 	local link = TSMAPI.Item:ToItemLink(TSMAPI.Item:ToItemString(rawLink)) -- generalize the link
-	seller = TSM:GetAuctionPlayer(seller, seller_full) or "?"
+	seller = TSM:GetAuctionPlayer(seller) or "?"
 	return TSMAPI.Auction:NewRecord(link, texture, stackSize, minBid, minIncrement, buyout, bid, seller, timeLeft, highBidder, rawLink)
 end
 
@@ -285,12 +285,12 @@ function private:StorePageResults(duplicateRecord)
 		numAuctions = GetNumAuctionItems("list")
 		private.pageTemp = {}
 		if numAuctions == 0 then return end
-		
+
 		for i=1, numAuctions do
 			private.pageTemp[i] = private:GetAuctionRecord(i)
 		end
 	end
-	
+
 	for i=1, numAuctions do
 		private.database:InsertAuctionRecord(private.pageTemp[i])
 	end
@@ -300,8 +300,8 @@ function private:SearchCurrentPageForTargetItem(targetInfo, keys)
 	-- check for the target item on this page
 	local indexList, firstAuction, lastAuction
 	for i=1, GetNumAuctionItems("list") do
-		local stackSize, minBid, buyout, bid, seller, seller_full = TSMAPI.Util:Select({3, 8, 10, 11, 14, 15}, GetAuctionItemInfo("list", i))
-		seller = TSM:GetAuctionPlayer(seller, seller_full)
+		local stackSize, minBid, buyout, bid, seller = TSMAPI.Util:Select({3, 7, 9, 10, 12}, GetAuctionItemInfo("list", i))
+		seller = TSM:GetAuctionPlayer(seller)
 		local displayedBid = bid == 0 and minBid or bid
 		local itemString = TSMAPI.Item:ToItemString(GetAuctionItemLink("list", i))
 		local auctionData = {itemString=itemString, stackSize=stackSize, displayedBid=displayedBid, buyout=buyout, seller=seller}
@@ -395,7 +395,7 @@ function private.ScanAllPagesThread(self, query)
 	-- wait for the AH to be ready
 	self:Sleep(0.1)
 	while not CanSendAuctionQuery() do self:Yield(true) end
-	
+
 	local tempData = {skipInfo={}, pagesScanned=0}
 
 	-- loop until we're through all the pages, at which point we'll break out
@@ -432,7 +432,7 @@ function private.ScanAllPagesThread(self, query)
 					query.page = query.page - numToSkip
 				end
 			end
-			
+
 			if not didSkip then
 				-- just regularly scan the last page we tried to skip
 				private:ScanCurrentPageThread(self, query, tempData)
@@ -445,7 +445,7 @@ function private.ScanAllPagesThread(self, query)
 		end
 		numPages = private:GetNumPages()
 	end
-	
+
 	private:DoCallback("SCAN_COMPLETE")
 end
 
@@ -454,8 +454,8 @@ function private.ScanLastPageThread(self)
 	-- wait for the AH to be ready
 	self:Sleep(0.1)
 	while not CanSendAuctionQuery() do self:Yield(true) end
-	
-	
+
+
 	-- get to the last page of the AH
 	local lastPage = private:GetLastPage()
 	local query = {name="", page=lastPage}
@@ -467,7 +467,7 @@ function private.ScanLastPageThread(self)
 		onLastPage = (query.page == lastPage)
 		query.page = lastPage
 	end
-	
+
 	-- scan the page and store the results then do the callback
 	private:StorePageResults()
 	private:DoCallback("SCAN_COMPLETE")
@@ -495,7 +495,7 @@ function private.FindAuctionThread(self, targetInfo)
 		private:DoCallback("FOUND_AUCTION", indexList)
 		return
 	end
-	
+
 	local searchDirection = nil
 	local estimatedPage = nil
 	local totalPages = math.huge
@@ -539,7 +539,7 @@ function private.FindAuctionThread(self, targetInfo)
 		query.page = 0
 		searchDirection = 1
 	end
-	
+
 
 	while true do
 		private.ScanThreadDoQueryAndValidate(self, query)
@@ -579,7 +579,7 @@ end
 
 function private.GetAllScanThread(self)
 	self:SetThreadName("GETALL_SCAN")
-	
+
 	-- wait until we can send the GetAll query
 	while true do
 		local canScan, canGetAll = CanSendAuctionQuery()
@@ -592,27 +592,27 @@ function private.GetAllScanThread(self)
 		end
 		self:Yield(true)
 	end
-	
+
 	private:DoCallback("GETALL_QUERY_START")
 	QueryAuctionItems("", nil, nil, 0, 0, 0, 0, 0, 0, true)
 	self:WaitForEvent("AUCTION_ITEM_LIST_UPDATE")
 	self:WaitForFunction(CanSendAuctionQuery)
-	
+
 	local numAuctions, totalNum = GetNumAuctionItems("list")
 	if numAuctions ~= totalNum then
 		return private:DoCallback("GETALL_BAD_DATA")
 	end
 	private:DoCallback("GETALL_PROGRESS", 1, numAuctions)
-	
+
 	-- scan the results (slowly as to not cause disconnects)
 	local scanData = {}
 	for i=1, numAuctions do
 		local itemString = TSMAPI.Item:ToBaseItemString(GetAuctionItemLink("list", i))
-		local stackSize, buyout = TSMAPI.Util:Select({3, 10}, GetAuctionItemInfo("list", i))
+		local stackSize, buyout = TSMAPI.Util:Select({3, 9}, GetAuctionItemInfo("list", i))
 		if not itemString or not stackSize or not buyout then
 			return private:DoCallback("GETALL_BAD_DATA")
 		end
-		
+
 		local itemBuyout = TSMAPI.Util:Round(buyout / stackSize)
 		if not scanData[itemString] then
 			scanData[itemString] = {buyouts={}, minBuyout=0, numAuctions=0}
@@ -626,7 +626,7 @@ function private.GetAllScanThread(self)
 			end
 		end
 		scanData[itemString].numAuctions = scanData[itemString].numAuctions + 1
-		
+
 		if i % 500 == 0 then
 			private:DoCallback("GETALL_PROGRESS", i, numAuctions)
 			self:Sleep(0.1)
@@ -637,7 +637,7 @@ function private.GetAllScanThread(self)
 	if numAuctions ~= GetNumAuctionItems("list") then
 		return private:DoCallback("GETALL_BAD_DATA")
 	end
-	
+
 	private:DoCallback("SCAN_COMPLETE", scanData)
 end
 

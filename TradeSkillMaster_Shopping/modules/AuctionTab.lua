@@ -618,7 +618,7 @@ function private.BidAuctionsThread(self, auctionInfo)
 	if indexList then
 		-- remove auctions which we've already bid on
 		for i = #indexList, 1, -1 do
-			if select(12, GetAuctionItemInfo("list", indexList[i])) then
+			if select(11, GetAuctionItemInfo("list", indexList[i])) then
 				tremove(indexList, i)
 			end
 		end
@@ -636,7 +636,7 @@ function private.BidAuctionsThread(self, auctionInfo)
 		if indexList then
 			-- remove auctions which we've already bid on
 			for i = #indexList, 1, -1 do
-				if select(12, GetAuctionItemInfo("list", indexList[i])) then
+				if select(11, GetAuctionItemInfo("list", indexList[i])) then
 					tremove(indexList, i)
 				end
 			end
@@ -697,7 +697,7 @@ function private.BidAuctionsThread(self, auctionInfo)
 			private.frame.content.result.rt:RemoveSelectedRecord()
 			if event == "BID_PLACED" then
 				-- update and re-insert this record
-				local minBid, minIncrement, bid, highBidder = TSMAPI.Util:Select({ 8, 9, 11, 12 }, GetAuctionItemInfo("list", bidInfo.index))
+				local minBid, minIncrement, bid, highBidder = TSMAPI.Util:Select({ 7, 8, 10, 11 }, GetAuctionItemInfo("list", bidInfo.index))
 				auctionRecord:SetData(auctionRecord.itemLink, auctionRecord.texture, auctionRecord.stackSize, minBid, minIncrement, auctionRecord.buyout, bid, auctionRecord.seller, auctionRecord.timeLeft, highBidder, auctionRecord.rawItemLink)
 				private.frame.content.result.rt:InsertAuctionRecord(1, auctionRecord)
 			end

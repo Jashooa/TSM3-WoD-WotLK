@@ -42,14 +42,9 @@ end
 -- Module Functions
 -- ============================================================================
 
-function TSM:GetAuctionPlayer(player, player_full)
+function TSM:GetAuctionPlayer(player)
 	if not player then return end
-	local realm = GetRealmName() or ""
-	if player_full and strjoin("-", player, realm) ~= player_full then
-		return player_full
-	else
-		return player
-	end
+	return player
 end
 
 function TSM:SetAuctionTabFlashing(moduleName, flashing)
@@ -84,7 +79,7 @@ end
 
 function private:CreateTSMAHTab(moduleName, callbackShow, callbackHide)
 	TSMAPI.Delay:Cancel("blizzAHLoadedDelay")
-	
+
 	local BFC = TSMAPI.GUI:GetBuildFrameConstants()
 	local frameInfo = {
 		type = "Frame",
@@ -157,7 +152,7 @@ function private:CreateTSMAHTab(moduleName, callbackShow, callbackHide)
 					local currentTotal = 0
 					local incomingTotal = 0
 					for i=1, GetNumAuctionItems("owner") do
-						local count, buyoutAmount = TSMAPI.Util:Select({3, 10}, GetAuctionItemInfo("owner", i))
+						local count, buyoutAmount = TSMAPI.Util:Select({3, 9}, GetAuctionItemInfo("owner", i))
 						if count == 0 then
 							incomingTotal = incomingTotal + buyoutAmount
 						else
@@ -196,7 +191,7 @@ function private:CreateTSMAHTab(moduleName, callbackShow, callbackHide)
 	PanelTemplates_SetNumTabs(AuctionFrame, tabId)
 	PanelTemplates_EnableTab(AuctionFrame, tabId)
 	auctionTab.tab = tab
-	
+
 	local ag = tab:CreateAnimationGroup()
 	local flash = ag:CreateAnimation("Alpha")
 	flash:SetOrder(1)
@@ -239,13 +234,13 @@ function private:InitializeAuctionFrame()
 	AuctionFrame:EnableMouse(true)
 	AuctionFrame:SetScript("OnMouseDown", function(self) if self:IsMovable() then self:StartMoving() end end)
 	AuctionFrame:SetScript("OnMouseUp", function(self) if self:IsMovable() then self:StopMovingOrSizing() end end)
-	
+
 	-- scale the auction frame according to the TSM option
 	if AuctionFrame:GetScale() ~= 1 and TSM.db.profile.auctionFrameScale == 1 then TSM.db.profile.auctionFrameScale = AuctionFrame:GetScale() end
 	AuctionFrame:SetScale(TSM.db.profile.auctionFrameScale)
-	
+
 	private:Hook("AuctionFrameTab_OnClick", private.TabChangeHook, true)
-	
+
 	-- Makes sure the TSM tab hides correctly when used with addons that hook this function to change tabs (ie Auctionator)
 	-- This probably doesn't have to be a SecureHook, but does need to be a Post-Hook.
 	private:SecureHook("ContainerFrameItemButton_OnModifiedClick", function()
@@ -283,13 +278,13 @@ function private:ShowTab(tab)
 	AuctionFrameMoneyFrame:Hide()
 	AuctionFrameCloseButton:Hide()
 	private:RegisterEvent("PLAYER_MONEY", "OnEvent")
-	
+
 	TSMAPI.Delay:AfterTime(0.1, function() AuctionFrameMoneyFrame:Hide() end)
-	
+
 	TSMAPI.Design:SetFrameBackdropColor(tab)
 	AuctionFrameTab1:SetPoint("TOPLEFT", AuctionFrame, "BOTTOMLEFT", 15, 1)
 	AuctionFrame:SetFrameLevel(1)
-	
+
 	tab:Show()
 	tab.minimized = nil
 	tab.moneyTextFrame.text:SetText(TSMAPI:MoneyToString(GetMoney(), "OPT_ICON"))
@@ -300,7 +295,7 @@ end
 function private:MinimizeTab(tab)
 	tab.minimized = true
 	tab:Hide()
-		
+
 	AuctionFrameTopLeft:Show()
 	AuctionFrameTop:Show()
 	AuctionFrameTopRight:Show()
@@ -404,7 +399,7 @@ do
 	hooksecurefunc("message", function()
 		if not AuctionFrame then return end
 		if not private:IsTSMTab(_G["AuctionFrameTab"..PanelTemplates_GetSelectedTab(AuctionFrame)]) then return end
-		
+
 		-- suppress Auctioneer's message
 		if BasicScriptErrorsText:GetText() == "The Server is not responding correctly.\nClosing and reopening the Auctionhouse may fix this problem." then
 			-- hide the error by clicking the button
