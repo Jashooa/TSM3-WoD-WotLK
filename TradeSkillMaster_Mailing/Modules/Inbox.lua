@@ -269,7 +269,7 @@ function private:InboxUpdate()
 
 	local numMail, totalMail = GetInboxNumItems()
 
-	local greenColor, redColor = "|cff00ff00", "|cffff0000"
+	local greenColor, yellowColor, redColor = "|cff00ff00", "|cffffff00", "|cffff0000"
 	local mailInfo = {}
 	local collectGold = 0
 	for i = 1, numMail do
@@ -291,6 +291,8 @@ function private:InboxUpdate()
 			elseif invoiceType == "seller" then
 				collectGold = collectGold + bid - ahcut
 				mailInfo[i] = format(L["Sale: %s (%d) | %s | %s"], itemName, quantity, TSMAPI:MoneyToString(bid - ahcut, greenColor), FormatDaysLeft(daysLeft, i))
+			elseif invoiceType == "seller_temp_invoice" then
+				mailInfo[i] = format("Sale Pending: %s (%d) | %s | %s", itemName, quantity, TSMAPI:MoneyToString(bid - ahcut, yellowColor), FormatDaysLeft(daysLeft, i))
 			end
 		elseif hasItem then
 			local itemLink
@@ -491,14 +493,14 @@ function Inbox:MAIL_CLOSED()
 end
 
 function private:ShouldDeleteMail(index)
-	local subject, money, cod, numItems, wasReturned, canReply, isGM = TSMAPI.Util:Select({4, 5, 6, 8, 10, 12, 13}, GetInboxHeaderInfo(index))
+    local subject, money, cod, numItems, wasReturned, canReply, isGM = TSMAPI.Util:Select({4, 5, 6, 8, 10, 12, 13}, GetInboxHeaderInfo(index))
 	if not TSM.db.global.deleteEmptyNPCMail then return false end
 	if isGM then return false end
 	if canReply then return false end
 	if numItems then return false end
 	if cod > 0 then return false end
 	if money > 0 then return false end
-	if wasReturned then return false end
+    if wasReturned then return false end
 	return true
 end
 
@@ -507,8 +509,9 @@ function private:ShouldOpenMail(index)
 	cod = cod or 0
 	money = money or 0
 	numItems = numItems or 0
+    local tempInvoice = GetInboxInvoiceInfo(index)
 
-	if isGM or cod > 0 or (money == 0 and numItems == 0) then return end
+	if isGM or cod > 0 or (money == 0 and numItems == 0 and not tempInvoice) then return end
 	if not private:CanLootMailIndex(index) then return end
 
 	if private.mode == "all" then
@@ -518,7 +521,7 @@ function private:ShouldOpenMail(index)
 			return true
 		end
 	elseif private.mode == "sales" then
-		return money > 0 and GetInboxInvoiceInfo(index) == "seller"
+		return (money > 0 and GetInboxInvoiceInfo(index) == "seller") or GetInboxInvoiceInfo(index) == "seller_temp_invoice"
 	elseif private.mode == "buys" then
 		return numItems > 0 and GetInboxInvoiceInfo(index) == "buyer"
 	elseif private.mode == "cancels" then
@@ -553,8 +556,8 @@ function private:PrintOpenMailMessage(index)
 		local invoiceType, itemName, playerName, bid, _, _, ahcut = GetInboxInvoiceInfo(index)
         playerName = playerName or "?"
         local quantity = 0
-        for j = 1, ATTACHMENTS_MAX_RECEIVE do
-            quantity = select(3, GetInboxItem(i, j))
+        for i = 1, ATTACHMENTS_MAX_RECEIVE do
+            quantity = select(3, GetInboxItem(index, i))
         end
         if quantity == 0 then
             quantity = 1
@@ -563,7 +566,10 @@ function private:PrintOpenMailMessage(index)
 			local itemLink = private:GetFirstInboxItemLink(index) or itemName
 			TSM:Printf(L["Bought %sx%d for %s from %s"], itemLink, quantity, TSMAPI:MoneyToString(bid, redColor), playerName)
 		elseif invoiceType == "seller" then
-			TSM:Printf(L["Sold [%s]x%d for %s to %s"], itemName, quantity, TSMAPI:MoneyToString(bid - ahcut, greenColor), playerName)
+            TSM:Printf(L["Sold [%s]x%d for %s to %s"], itemName, quantity, TSMAPI:MoneyToString(bid - ahcut, greenColor), playerName)
+        elseif invoiceType == "seller_temp_invoice" then
+            TSM:Printf("Deleted sale pending of %s (%d) for %s.", itemName, quantity, TSMAPI:MoneyToString(bid - ahcut, yellowColor))
+            DeleteInboxItem(index)
 		end
 	elseif hasItem then
 		local itemLink
