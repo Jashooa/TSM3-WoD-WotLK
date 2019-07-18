@@ -145,20 +145,40 @@ function Professions:GetFrameInfo()
 				name = "TSMCraftingSearchBar",
 				text = SEARCH,
 				textColor = { 1, 1, 1, 0.5 },
-				size = { 240, 24 },
+				size = { 220, 24 },
 				points = { { "TOPLEFT", 5, -35 } },
 				scripts = { "OnEditFocusGained", "OnEditFocusLost", "OnTextChanged", "OnEnterPressed" },
+            },
+			{
+				type = "Button",
+				key = "filterBtn",
+				name = "TSMCraftingFilterButton",
+				text = "SubClass >>",
+				textHeight = 14,
+				size = { 75, 24 },
+                points = { { "TOPLEFT", "searchBar", "TOPRIGHT", 5, 0 } },
+				scripts = { "OnClick" },
+            },
+			{
+				type = "Button",
+				key = "filter2Btn",
+				name = "TSMCraftingFilter2Button",
+				text = "InvSlot >>",
+				textHeight = 14,
+				size = { 75, 24 },
+				points = { { "TOPLEFT", "filterBtn", "TOPRIGHT", 5, 0 } },
+				scripts = { "OnClick" },
 			},
 			{
 				type = "Button",
 				key = "clearFilterBtn",
 				text = L["Clear Filters"],
 				textHeight = 14,
-				size = { 80, 24 },
-				points = { { "TOPLEFT", "searchBar", "TOPRIGHT", 5, 0 } },
+				size = { nil, 24 },
+                points = { { "TOPLEFT", "filter2Btn", "TOPRIGHT", 5, 0 }, { "TOPRIGHT", -5, -35 } },
 				scripts = { "OnClick" },
 			},
-			{
+			--[[{
 				type = "Button",
 				key = "filterBtn",
 				name = "TSMCraftingFilterButton",
@@ -167,7 +187,7 @@ function Professions:GetFrameInfo()
 				size = { nil, 24 },
 				points = { { "TOPLEFT", "clearFilterBtn", "TOPRIGHT", 5, 0 }, { "TOPRIGHT", -5, -35 } },
 				scripts = { "OnClick" },
-			},
+			},]]--
 			{
 				type = "HLine",
 				offset = -64,
@@ -419,14 +439,19 @@ function Professions:GetFrameInfo()
 					self:ClearFocus()
 				end,
 			},
+			filterBtn = {
+				OnClick = function(self)
+					ToggleDropDownMenu(1, nil, TradeSkillSubClassDropDown, "TSMCraftingFilterButton", 0, 0)
+				end,
+            },
+			filter2Btn = {
+				OnClick = function(self)
+					ToggleDropDownMenu(1, nil, TradeSkillInvSlotDropDown, "TSMCraftingFilter2Button", 0, 0)
+				end,
+            },
 			clearFilterBtn = {
 				OnClick = function(self)
 					TradeSkill:ClearFilters()
-				end,
-			},
-			filterBtn = {
-				OnClick = function(self)
-					Lib_ToggleDropDownMenu(1, nil, TSMTradeSkillFilterDropDown, "TSMCraftingFilterButton", self:GetWidth(), 0)
 				end,
 			},
 			st = {
