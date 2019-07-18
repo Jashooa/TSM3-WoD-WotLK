@@ -484,7 +484,7 @@ function TSM:LoadTooltip(itemString, quantity, moneyCoins, lines)
 									local matValue = (TSMAPI:GetCustomPriceValue(TSM.db.profile.destroyValueSource, targetItem) or 0) * deData.amountOfMats
 									local name, _, matQuality = TSMAPI.Item:GetInfo(targetItem)
 									if matQuality and matValue > 0 then
-										local colorName = format("|c%s%s x %s|r", select(4, GetItemQualityColor(matQuality)), name, deData.amountOfMats)
+										local colorName = format("%s%s x %s|r", select(4, GetItemQualityColor(matQuality)), name, deData.amountOfMats)
 										tinsert(lines, {left="    "..colorName, right=TSMAPI:MoneyToString(matValue, "|cffffffff", "OPT_PAD", moneyCoins and "OPT_ICON" or nil)})
 									end
 								end
@@ -510,7 +510,7 @@ function TSM:LoadTooltip(itemString, quantity, moneyCoins, lines)
 						local value = (TSMAPI:GetCustomPriceValue(TSM.db.profile.destroyValueSource, targetItem) or 0) * herbs[itemString].rate
 						local name, _, matQuality = TSMAPI.Item:GetInfo(targetItem)
 						if matQuality then
-							local colorName = format("|c%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", herbs[itemString].rate * quantity)
+							local colorName = format("%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", herbs[itemString].rate * quantity)
 							if value > 0 then
 								tinsert(lines, {left="    "..colorName, right=TSMAPI:MoneyToString(value*quantity, "|cffffffff", "OPT_PAD", moneyCoins and "OPT_ICON" or nil)})
 							end
@@ -535,7 +535,7 @@ function TSM:LoadTooltip(itemString, quantity, moneyCoins, lines)
 						local value = (TSMAPI:GetCustomPriceValue(TSM.db.profile.destroyValueSource, targetItem) or 0) * gems[itemString].rate
 						local name, _, matQuality = TSMAPI.Item:GetInfo(targetItem)
 						if matQuality then
-							local colorName = format("|c%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", gems[itemString].rate * quantity)
+							local colorName = format("%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", gems[itemString].rate * quantity)
 							if value > 0 then
 								tinsert(lines, {left="    "..colorName, right=TSMAPI:MoneyToString(value*quantity, "|cffffffff", "OPT_PAD", moneyCoins and "OPT_ICON" or nil)})
 							end
@@ -560,7 +560,7 @@ function TSM:LoadTooltip(itemString, quantity, moneyCoins, lines)
 						local value = (TSMAPI:GetCustomPriceValue(TSM.db.profile.destroyValueSource, targetItem) or 0) * srcItems[itemString].rate
 						local name, _, matQuality = TSMAPI.Item:GetInfo(targetItem)
 						if matQuality then
-							local colorName = format("|c%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", srcItems[itemString].rate * quantity)
+							local colorName = format("%s%s%s%s|r",select(4,GetItemQualityColor(matQuality)),name, " x ", srcItems[itemString].rate * quantity)
 							if value > 0 then
 								tinsert(lines, {left="    "..colorName, right=TSMAPI:MoneyToString(value*quantity, "|cffffffff", "OPT_PAD", moneyCoins and "OPT_ICON" or nil)})
 							end

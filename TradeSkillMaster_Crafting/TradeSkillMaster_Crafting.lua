@@ -199,7 +199,7 @@ function TSM:LoadTooltip(itemString, quantity, options, moneyCoins, lines)
 					if name and mat then
 						local cost = TSMAPI:GetCustomPriceValue(mat.customValue or TSM.db.global.defaultMatCostMethod, matItemString)
 						if cost then
-							local colorName = format("|c%s%s%s%s|r", select(4, GetItemQualityColor(quality)), name, " x ", TSMAPI.Util:Round(matQuantity / craftInfo.numResult, 0.01))
+							local colorName = format("%s%s%s%s|r", select(4, GetItemQualityColor(quality)), name, " x ", TSMAPI.Util:Round(matQuantity / craftInfo.numResult, 0.01))
 							tinsert(lines, { left = "    " .. colorName, right = TSMAPI:MoneyToString((cost * matQuantity) / craftInfo.numResult, "|cffffffff", "OPT_PAD", moneyCoins and "OPT_ICON" or nil) })
 						end
 					end

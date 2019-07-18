@@ -138,7 +138,7 @@ function private:CreateTwitterHooks()
 		else
 			local prefillText = earned and SOCIAL_ITEM_PREFILL_TEXT_EARNED or SOCIAL_ITEM_PREFILL_TEXT_GENERIC
 			local r, g, b, colorString = GetItemQualityColor(quality)
-			local text = format(SOCIAL_ITEM_PREFILL_TEXT_ALL, prefillText, format("|c%s[%s]|r", colorString, name), format(TSM_ITEM_URL_FORMAT, itemID))
+			local text = format(SOCIAL_ITEM_PREFILL_TEXT_ALL, prefillText, format("%s[%s]|r", colorString, name), format(TSM_ITEM_URL_FORMAT, itemID))
 			SocialPostFrame:SetAttribute("settext", text)
 		end
 	end)
