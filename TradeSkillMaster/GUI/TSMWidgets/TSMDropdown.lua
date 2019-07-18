@@ -80,7 +80,7 @@ local function Dropdown_TogglePullout(this, button)
 		AceGUI:ClearFocus()
 	else
 		self.open = true
-		self.pullout:SetWidth(self.dropdown:GetWidth())
+		self.pullout:SetWidth(self.frame:GetWidth())
 		self.pullout:Open("TOPLEFT", self.frame, "BOTTOMLEFT", 0, self.label:IsShown() and -2 or 0)
 		AceGUI:SetFocus(self)
 	end
@@ -89,13 +89,13 @@ end
 local function OnPulloutOpen(this)
 	local self = this.userdata.obj
 	local value = self.value
-	
+
 	if not self.multiselect then
 		for i, item in this:IterateItems() do
 			item:SetValue(item.userdata.value == value)
 		end
 	end
-	
+
 	self.open = true
 end
 
@@ -123,7 +123,7 @@ end
 
 local function OnItemValueChanged(this, event, checked)
 	local self = this.userdata.obj
-	
+
 	if self.multiselect then
 		self:Fire("OnValueChanged", this.userdata.value, checked)
 		ShowMultiText(self)
@@ -134,7 +134,7 @@ local function OnItemValueChanged(this, event, checked)
 		else
 			this:SetValue(true)
 		end
-		if self.open then	
+		if self.open then
 			self.pullout:Close()
 		end
 	end
@@ -154,33 +154,33 @@ local methods = {
 		pullout:SetCallback("OnOpen", OnPulloutOpen)
 		self.pullout.frame:SetFrameLevel(self.frame:GetFrameLevel() + 1)
 		fixlevels(self.pullout.frame, self.pullout.frame:GetChildren())
-		
+
 		self:SetHeight(44)
 		self:SetWidth(200)
 		self:SetLabel()
 		self:ClearMultiselectChecked()
 	end,
-	
+
 	["OnRelease"] = function(self)
 		if self.open then
 			self.pullout:Close()
 		end
 		AceGUI:Release(self.pullout)
 		self.pullout = nil
-		
+
 		self:SetText("")
 		self:SetDisabled(false)
 		self:SetMultiselect(false)
-		
+
 		self.value = nil
 		self.list = nil
 		self.open = nil
 		self.hasClose = nil
-		
+
 		self.frame:ClearAllPoints()
 		self.frame:Hide()
 	end,
-	
+
 	["SetDisabled"] = function(self, disabled)
 		self.disabled = disabled
 		TSMAPI.Design:SetWidgetTextColor(self.text, disabled)
@@ -191,17 +191,17 @@ local methods = {
 			self.button:Enable()
 		end
 	end,
-	
+
 	["ClearFocus"] = function(self)
 		if self.open then
 			self.pullout:Close()
 		end
 	end,
-	
+
 	["SetText"] = function(self, text)
 		self.text:SetText(text or "")
 	end,
-	
+
 	["SetLabel"] = function(self, text)
 		if text and text ~= "" then
 			self.label:SetText(text)
@@ -217,18 +217,18 @@ local methods = {
 			self.alignoffset = 12
 		end
 	end,
-	
+
 	["SetValue"] = function(self, value)
 		if self.list then
 			self:SetText(self.list[value] or "")
 		end
 		self.value = value
 	end,
-	
+
 	["GetValue"] = function(self)
 		return self.value
 	end,
-	
+
 	["SetItemValue"] = function(self, item, value)
 		if not self.multiselect then return end
 		for i, widget in self.pullout:IterateItems() do
@@ -240,7 +240,7 @@ local methods = {
 		end
 		ShowMultiText(self)
 	end,
-	
+
 	["SetItemDisabled"] = function(self, item, disabled)
 		for i, widget in self.pullout:IterateItems() do
 			if widget.userdata.value == item then
@@ -248,7 +248,7 @@ local methods = {
 			end
 		end
 	end,
-	
+
 	["AddListItem"] = function(self, value, text, itemType)
 		itemType = itemType or "TSMDropdown-Item-Toggle"
 		local exists = AceGUI:GetWidgetVersion(itemType)
@@ -262,7 +262,7 @@ local methods = {
 		item:SetCallback("OnValueChanged", OnItemValueChanged)
 		self.pullout:AddItem(item)
 	end,
-	
+
 	["AddCloseButton"] = function(self)
 		if not self.hasClose then
 			local close = AceGUI:Create("TSMDropdown-Item-Execute")
@@ -271,20 +271,20 @@ local methods = {
 			self.hasClose = true
 		end
 	end,
-	
+
 	["SetList"] = function(self, list, order, itemType)
 		self.sortlist = self.sortlist or {}
 		self.list = list
 		self.pullout:Clear()
 		self.hasClose = nil
 		if not list then return end
-		
+
 		if type(order) ~= "table" then
 			for v in pairs(list) do
 				self.sortlist[#self.sortlist + 1] = v
 			end
 			tsort(self.sortlist)
-			
+
 			for i, key in ipairs(self.sortlist) do
 				self:AddListItem(key, list[key], itemType)
 				self.sortlist[i] = nil
@@ -299,14 +299,14 @@ local methods = {
 			self:AddCloseButton()
 		end
 	end,
-	
+
 	["AddItem"] = function(self, value, text, itemType)
 		if self.list then
 			self.list[value] = text
 			self:AddListItem(value, text, itemType)
 		end
 	end,
-	
+
 	["SetMultiselect"] = function(self, multi)
 		self.multiselect = multi
 		if multi then
@@ -314,7 +314,7 @@ local methods = {
 			self:AddCloseButton()
 		end
 	end,
-	
+
 	["GetMultiselect"] = function(self)
 		return self.multiselect
 	end,
@@ -335,10 +335,10 @@ Constructor
 
 local function Constructor()
 	local count = AceGUI:GetNextWidgetNum(Type)
-	
+
 	local frame = CreateFrame("Frame", nil, UIParent)
 	local dropdown = CreateFrame("Frame", "TSMDropDown"..count, frame, "UIDropDownMenuTemplate")
-	
+
 	frame:SetScript("OnHide", Dropdown_OnHide)
 
 	dropdown:ClearAllPoints()
@@ -352,10 +352,10 @@ local function Constructor()
 	local left = _G[dropdown:GetName().."Left"]
 	local middle = _G[dropdown:GetName().."Middle"]
 	local right = _G[dropdown:GetName().."Right"]
-	
+
 	middle:ClearAllPoints()
 	right:ClearAllPoints()
-	
+
 	middle:SetPoint("LEFT", left, "RIGHT", 0, 0)
 	middle:SetPoint("RIGHT", right, "LEFT", 0, 0)
 	right:SetPoint("TOPRIGHT", dropdown, "TOPRIGHT", 0, 17)
@@ -374,7 +374,7 @@ local function Constructor()
 	text:SetPoint("LEFT", dropdown, "LEFT", 8, 0)
 	text:SetFont(TSMAPI.Design:GetContentFont("normal"))
 	text:SetShadowColor(0, 0, 0, 0)
-	
+
 	local label = frame:CreateFontString(nil, "OVERLAY")
 	label:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, 0)
 	label:SetPoint("TOPRIGHT", frame, "TOPRIGHT", 0, 0)
@@ -383,11 +383,11 @@ local function Constructor()
 	label:SetFont(TSMAPI.Design:GetContentFont("small"))
 	label:SetShadowColor(0, 0, 0, 0)
 	label:Hide()
-	
+
 	left:Hide()
 	middle:Hide()
 	right:Hide()
-	
+
 	local widget = {
 		frame = frame,
 		label = label,
