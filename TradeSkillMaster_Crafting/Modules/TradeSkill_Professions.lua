@@ -666,7 +666,6 @@ function Professions:UpdateST()
 	local inventoryTotals = select(4, TSM:GetInventoryTotals())
 	for i = 1, GetNumTradeSkills() do
         local skillName, skillType, numAvailable, isExpanded = GetTradeSkillInfo(i)
-        print(GetTradeSkillInfo(i))
 		TSMAPI:Assert(skillName, "No skill name found for index " .. i)
 		local spellID = TSM:GetSpellID(i)
 		local numAvailableAll, priceText = nil, nil
