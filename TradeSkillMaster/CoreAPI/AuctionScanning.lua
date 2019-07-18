@@ -606,32 +606,35 @@ function private.GetAllScanThread(self)
 
 	-- scan the results (slowly as to not cause disconnects)
 	local scanData = {}
-	for i=1, numAuctions do
-		local itemString = TSMAPI.Item:ToBaseItemString(GetAuctionItemLink("list", i))
-		local stackSize, buyout = TSMAPI.Util:Select({3, 9}, GetAuctionItemInfo("list", i))
-		if not itemString or not stackSize or not buyout then
-			return private:DoCallback("GETALL_BAD_DATA")
-		end
+    for i=1, numAuctions do
+        local itemID = TSMAPI.Item:ToItemID(GetAuctionItemLink("list", i))
+        if itemID and itemID ~= 52021 and itemID ~= 52020 then
+            local itemString = TSMAPI.Item:ToBaseItemString(GetAuctionItemLink("list", i))
+            local stackSize, buyout = TSMAPI.Util:Select({3, 9}, GetAuctionItemInfo("list", i))
+            if not itemString or not stackSize or not buyout then
+                return private:DoCallback("GETALL_BAD_DATA")
+            end
 
-		local itemBuyout = TSMAPI.Util:Round(buyout / stackSize)
-		if not scanData[itemString] then
-			scanData[itemString] = {buyouts={}, minBuyout=0, numAuctions=0}
-		end
-		if itemBuyout > 0 then
-			if scanData[itemString].minBuyout == 0 or itemBuyout < scanData[itemString].minBuyout then
-				scanData[itemString].minBuyout = itemBuyout
-			end
-			for i=1, stackSize do
-				tinsert(scanData[itemString].buyouts, itemBuyout)
-			end
-		end
-		scanData[itemString].numAuctions = scanData[itemString].numAuctions + 1
+            local itemBuyout = TSMAPI.Util:Round(buyout / stackSize)
+            if not scanData[itemString] then
+                scanData[itemString] = {buyouts={}, minBuyout=0, numAuctions=0}
+            end
+            if itemBuyout > 0 then
+                if scanData[itemString].minBuyout == 0 or itemBuyout < scanData[itemString].minBuyout then
+                    scanData[itemString].minBuyout = itemBuyout
+                end
+                for i=1, stackSize do
+                    tinsert(scanData[itemString].buyouts, itemBuyout)
+                end
+            end
+            scanData[itemString].numAuctions = scanData[itemString].numAuctions + 1
+        end
 
-		if i % 500 == 0 then
-			private:DoCallback("GETALL_PROGRESS", i, numAuctions)
-			self:Sleep(0.1)
-		end
-		self:Yield()
+        if i % 500 == 0 then
+            private:DoCallback("GETALL_PROGRESS", i, numAuctions)
+            self:Sleep(0.1)
+        end
+        self:Yield()
 	end
 	private:DoCallback("GETALL_PROGRESS", numAuctions, numAuctions)
 	if numAuctions ~= GetNumAuctionItems("list") then
