@@ -312,9 +312,9 @@ end
 function TSM:RegisterModule()
 	TSM.icons = {
 		{ side = "options", desc = L["TSM Features"], slashCommand = "features", callback = "FeaturesGUI:LoadGUI", icon = "Interface\\Icons\\Achievement_Quests_Completed_04" },
-		{ side = "options", desc = L["Options"], callback = "Options:Load", icon = "Interface\\Icons\\INV_Inscription_Tooltip_DarkmoonCard_MOP" },
+		{ side = "options", desc = L["Options"], callback = "Options:Load", icon = "Interface\\Icons\\INV_Misc_Gear_01" },
 		{ side = "options", desc = L["Groups"], callback = "GroupOptions:Load", slashCommand = "groups", icon = "Interface\\Icons\\INV_DataCrystal08" },
-		{ side = "options", desc = L["Operations"], slashCommand = "operations", callback = "Operations:LoadOperationOptions", icon = "Interface\\Icons\\INV_Misc_Enggizmos_33" },
+		{ side = "options", desc = L["Operations"], slashCommand = "operations", callback = "Operations:LoadOperationOptions", icon = "Interface\\Icons\\INV_Gizmo_Felironbolts" },
 	}
 
 	TSM.priceSources = {}
