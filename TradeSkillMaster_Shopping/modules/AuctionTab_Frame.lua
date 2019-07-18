@@ -777,13 +777,13 @@ function AuctionTabFrame:Create(parent)
 			},
 		},
 	}
-	
+
 	private.frame = TSMAPI.GUI:BuildFrame(frameInfo)
-	
+
 	for key, func in pairs(frameFunctions) do
 		private.frame[key] = func
 	end
-	
+
 	local helpPlateInfo = {
 		FramePos = {x = 5, y = -5},
 		FrameSize = {width = private.frame:GetWidth(), height = private.frame:GetHeight()},
@@ -812,18 +812,18 @@ function AuctionTabFrame:Create(parent)
 			ToolTipText = L["This is the main content area which will change depending on which button is selected above."]
 		},
 	}
-	
-	local mainHelpBtn = CreateFrame("Button", nil, private.frame, "MainHelpPlateButton")
+
+	local mainHelpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
 	mainHelpBtn:SetPoint("TOPLEFT", private.frame, 50, 35)
 	mainHelpBtn:SetScript("OnClick", function() frameFunctions:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, true) end)
 	mainHelpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then frameFunctions:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, false) end end)
-	
+
 	if not TSM.db.global.helpPlatesShown.auction then
 		TSM.db.global.helpPlatesShown.auction = true
 		frameFunctions:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, false)
 	end
 end
-	
+
 function frameFunctions:ToggleHelpPlate(frame, info, btn, isUser)
 	if not HelpPlate_IsShowing(info) then
 		HelpPlate:SetParent(frame)
@@ -918,7 +918,7 @@ function frameFunctions.UpdateCurrentTab(tab)
 		end
 	end
 	TSMAPI:Assert(type(tab) == "string")
-	
+
 	-- set button highlights
 	for name, btn in pairs(private.frame.header.tabBtns) do
 		if type(btn) == "table" and btn.tsmFrameType == "Button" then
@@ -929,7 +929,7 @@ function frameFunctions.UpdateCurrentTab(tab)
 			end
 		end
 	end
-	
+
 	-- set content frame visibility
 	for name, frame in pairs(private.frame.content) do
 		if type(frame) == "table" and frame.tsmFrameType == "Frame" then
@@ -957,7 +957,7 @@ function frameFunctions.UpdateSearchMode(mode)
 	end
 	TSMAPI:Assert(type(mode) == "string")
 	private.searchMode = mode
-	
+
 	-- clear button highlights
 	for name, btn in pairs(private.frame.header.modeBtns) do
 		if type(btn) == "table" and btn.tsmFrameType == "Button" then
@@ -968,11 +968,11 @@ function frameFunctions.UpdateSearchMode(mode)
 			end
 		end
 	end
-	
+
 	-- clear the search bar
 	private.frame.header.searchBox:SetText("")
 	private.frame.header.searchBox:Enable()
-	
+
 	-- update the results table
 	private.frame.content.result.rt:Clear()
 	local info = {
@@ -1015,7 +1015,7 @@ function frameFunctions.UpdateSearchInProgress(inProgress, updateStatus)
 		for name, btn in pairs(headerFrame.tabBtns) do
 			if type(btn) == "table" and btn.tsmFrameType == "Button" and name ~= "result" then
 				btn:Disable()
-			end		
+			end
 		end
 		-- disable search box
 		headerFrame.searchBox:Disable()
@@ -1045,7 +1045,7 @@ function frameFunctions.UpdateSearchInProgress(inProgress, updateStatus)
 		for name, btn in pairs(headerFrame.tabBtns) do
 			if type(btn) == "table" and btn.tsmFrameType == "Button" then
 				btn:Enable()
-			end		
+			end
 		end
 		-- enable search box
 		headerFrame.searchBox:Enable()
@@ -1056,7 +1056,7 @@ function frameFunctions.UpdateSearchInProgress(inProgress, updateStatus)
 			private.frame.content.result.statusBar:UpdateStatus(100, 100)
 			private.frame.content.result.statusBar:SetStatusText(L["Done Scanning"])
 		end
-	
+
 		if private.extraInfo and private.extraInfo.continue then
 			headerFrame.searchBtn:SetText(TSMAPI.Design:GetInlineColor("link")..SEARCH.."|r")
 			headerFrame.searchBtn.tooltip = private.extraInfo.continue.tooltip
@@ -1083,7 +1083,7 @@ function frameFunctions.UpdateConfirmation(mode, auctionRecord, info)
 		end
 		confirmationFrame = confirmationFrame[mode]
 	end
-	
+
 	if not mode then
 		confirmationFrame:Hide()
 		private.frame.content.result.rt:SetScrollDisabled(false)

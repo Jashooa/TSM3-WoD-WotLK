@@ -215,7 +215,7 @@ function private:CreateDestroyingFrame()
 		},
 	}
 
-	local mainHelpBtn = CreateFrame("Button", nil, private.frame, "MainHelpPlateButton")
+	local mainHelpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
 	mainHelpBtn:SetPoint("TOPLEFT", private.frame, -25, 30)
 	mainHelpBtn:SetScript("OnClick", function() private:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, true) end)
 	mainHelpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then private:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, false) end end)

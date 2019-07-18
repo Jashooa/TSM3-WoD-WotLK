@@ -23,7 +23,7 @@ end
 
 function Groups:CreateTab(parent)
 	Groups:RegisterEvent("MAIL_CLOSED", function() TSMAPI.Delay:Cancel("mailingResendDelay") end)
-	
+
 	local BFC = TSMAPI.GUI:GetBuildFrameConstants()
 	local frameInfo = {
 		type = "Frame",
@@ -76,8 +76,8 @@ function Groups:CreateTab(parent)
 							ToolTipText = L["Click this button to automatically mail items in the groups which you have selected."],
 						},
 					}
-					
-					self.helpBtn = CreateFrame("Button", nil, private.frame, "MainHelpPlateButton")
+
+					self.helpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
 					self.helpBtn:SetPoint("TOPLEFT", 50, 100)
 					self.helpBtn:SetScript("OnClick", function() TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, true) end)
 					self.helpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false) end end)

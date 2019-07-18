@@ -128,7 +128,7 @@ function QuickSend:CreateTab()
 				private.frame.btn:GetFontString():SetWidth(private.frame.btn:GetWidth())
 				private.frame.btn:GetFontString():SetHeight(private.frame.btn:GetHeight())
 				private:UpdateSendButton()
-				
+
 				if not self.helpBtn then
 					local TOTAL_WIDTH = private.frame:GetParent():GetWidth()
 					local helpPlateInfo = {
@@ -165,8 +165,8 @@ function QuickSend:CreateTab()
 							ToolTipText = L["Lastly, click this button to send the mail."],
 						},
 					}
-					
-					self.helpBtn = CreateFrame("Button", nil, private.frame, "MainHelpPlateButton")
+
+					self.helpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
 					self.helpBtn:SetPoint("TOPLEFT", 50, 100)
 					self.helpBtn:SetScript("OnClick", function() TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, true) end)
 					self.helpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false) end end)
@@ -258,7 +258,7 @@ function QuickSend:CreateTab()
 					else
 						quantity = min(private.quantity, numHave)
 					end
-					
+
 					local clearOnSend = not IsShiftKeyDown()
 					TSM.AutoMail:SendItems({[itemString]=quantity}, private.target, function() private:UpdateSendButton(clearOnSend) end, private.cod > 0 and private.cod)
 					self:SetText(L["Sending..."])

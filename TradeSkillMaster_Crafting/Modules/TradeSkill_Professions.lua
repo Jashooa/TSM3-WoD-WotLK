@@ -39,22 +39,22 @@ function private.InitializeDropdown(self, level)
 		info.checked = TradeSkillFrame.filterTbl.hasMaterials
 		info.isNotRadio = true
 		Lib_UIDropDownMenu_AddButton(info, level)
-		
+
 		local _, _, skillLineMaxRank = GetTradeSkillLine()
 		local isNPCCrafting = IsNPCCrafting() and skillLineMaxRank == 0
 		if (not IsTradeSkillGuild() and not isNPCCrafting) then
 			info.text = TRADESKILL_FILTER_HAS_SKILL_UP
-			info.func = function() 
+			info.func = function()
 				TradeSkillFrame.filterTbl.hasSkillUp  = not TradeSkillFrame.filterTbl.hasSkillUp
 				TradeSkillOnlyShowSkillUps(TradeSkillFrame.filterTbl.hasSkillUp)
 				TradeSkillUpdateFilterBar()
-			end 
+			end
 			info.keepShownOnClick = true
 			info.checked = TradeSkillFrame.filterTbl.hasSkillUp
 			info.isNotRadio = true
 			Lib_UIDropDownMenu_AddButton(info, level)
 		end
-		
+
 		info.checked = 	nil
 		info.isNotRadio = nil
 		info.text = TRADESKILL_FILTER_SLOTS
@@ -64,7 +64,7 @@ function private.InitializeDropdown(self, level)
 		info.hasArrow = true
 		info.value = 1
 		Lib_UIDropDownMenu_AddButton(info, level)
-				
+
 		info.text = TRADESKILL_FILTER_SUBCLASS
 		info.func = nil
 		info.notCheckable = true
@@ -96,7 +96,7 @@ function private.InitializeDropdown(self, level)
 				Lib_UIDropDownMenu_AddButton(info, level)
 			end
 		end
-	elseif level == 3 then	
+	elseif level == 3 then
 		local subClasses = {GetTradeSkillSubClasses()}
 		local subslots
 		subslots = {GetTradeSkillSubCategories(LIB_UIDROPDOWNMENU_MENU_VALUE)}
@@ -388,7 +388,7 @@ function Professions:GetFrameInfo()
 						},
 					}
 
-					self.helpBtn = CreateFrame("Button", nil, private.frame.professionsTab, "MainHelpPlateButton")
+					self.helpBtn = CreateFrame("Button", nil, private.frame.professionsTab, "UIPanelButtonTemplate")
 					self.helpBtn:SetPoint("CENTER", private.frame, "TOPLEFT", 0, 0)
 					self.helpBtn:SetScript("OnClick", function() TradeSkill:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, true) end)
 					self.helpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TradeSkill:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false) end end)

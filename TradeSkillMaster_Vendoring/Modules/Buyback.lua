@@ -66,7 +66,7 @@ function Buyback:CreateTab()
 						},
 					}
 
-					self.helpBtn = CreateFrame("Button", nil, private.frame, "MainHelpPlateButton")
+					self.helpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
 					self.helpBtn:SetPoint("TOPLEFT", 50, 100)
 					self.helpBtn:SetScript("OnClick", function() TSM.MerchantTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, true) end)
 					self.helpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TSM.MerchantTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false) end end)

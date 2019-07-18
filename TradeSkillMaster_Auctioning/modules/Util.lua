@@ -280,7 +280,7 @@ function Util:createTab(parent)
 		},
 	}
 
-	local mainHelpBtn = CreateFrame("Button", nil, private.frame, "MainHelpPlateButton")
+	local mainHelpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
 	mainHelpBtn:SetPoint("TOPRIGHT", private.frame, 45, 70)
 	mainHelpBtn:SetScript("OnClick", function() Util:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, true) end)
 	mainHelpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then Util:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, false) end end)

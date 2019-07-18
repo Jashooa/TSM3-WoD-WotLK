@@ -31,7 +31,7 @@ end
 
 function BankUI:createTab(parent)
 	if private.frame then return private.frame end
-	
+
 	local BFC = TSMAPI.GUI:GetBuildFrameConstants()
 	local frameInfo = {
 		type = "Frame",
@@ -111,7 +111,7 @@ function BankUI:createTab(parent)
 			},
 		},
 	}
-	
+
 	private.frame = TSMAPI.GUI:BuildFrame(frameInfo)
 
 	local helpPlateInfo = {
@@ -167,7 +167,7 @@ function BankUI:createTab(parent)
 		},
 	}
 
-	local mainHelpBtn = CreateFrame("Button", nil, private.frame, "MainHelpPlateButton")
+	local mainHelpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
 	mainHelpBtn:SetPoint("TOPRIGHT", private.frame, 45, 70)
 	mainHelpBtn:SetScript("OnClick", function() BankUI:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, true) end)
 	mainHelpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then BankUI:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, false) end end)

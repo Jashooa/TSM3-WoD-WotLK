@@ -91,8 +91,8 @@ function Groups:GetFrameInfo()
 							ToolTipText = L["Click here to restock the selected groups based on their Crafting operations."]
 						},
 					}
-					
-					self.helpBtn = CreateFrame("Button", nil, private.frame.groupsTab, "MainHelpPlateButton")
+
+					self.helpBtn = CreateFrame("Button", nil, private.frame.groupsTab, "UIPanelButtonTemplate")
 					self.helpBtn:SetPoint("CENTER", private.frame, "TOPLEFT", 0, 0)
 					self.helpBtn:SetScript("OnClick", function() TradeSkill:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, true) end)
 					self.helpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TradeSkill:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false) end end)

@@ -326,7 +326,7 @@ function Gather:CreateMainFrame()
 		},
 	}
 
-	local mainHelpBtn = CreateFrame("Button", nil, private.gatheringFrame, "MainHelpPlateButton")
+	local mainHelpBtn = CreateFrame("Button", nil, private.gatheringFrame, "UIPanelButtonTemplate")
 	mainHelpBtn:SetPoint("CENTER", private.gatheringFrame, "TOPRIGHT", 0, 0)
 	mainHelpBtn:SetScript("OnClick", function() TradeSkill:ToggleHelpPlate(private.gatheringFrame, helpPlateInfo, mainHelpBtn, true) end)
 	mainHelpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TradeSkill:ToggleHelpPlate(private.gatheringFrame, helpPlateInfo, mainHelpBtn, false) end end)

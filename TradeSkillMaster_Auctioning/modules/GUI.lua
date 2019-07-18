@@ -243,7 +243,7 @@ function private:CreateSelectionFrame(parent)
 		},
 	}
 
-	local mainHelpBtn = CreateFrame("Button", nil, frame, "MainHelpPlateButton")
+	local mainHelpBtn = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
 	mainHelpBtn:SetPoint("TOP", frame, -300, 70)
 	mainHelpBtn:SetScript("OnClick", function() private:ToggleHelpPlate(frame, helpPlateInfo, mainHelpBtn, true) end)
 	mainHelpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then private:ToggleHelpPlate(frame, helpPlateInfo, mainHelpBtn, false) end end)
