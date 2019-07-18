@@ -107,7 +107,7 @@ function GUI:CreateInputBox(parent, name)
 end
 
 function GUI:SetAutoComplete(inputBox, params)
-	local autoCompleteHandlers = {"OnTabPressed", "OnEnterPressed", "OnTextChanged", "OnChar", "OnEditFocusLost", "OnEscapePressed", "OnArrowPressed"}
+	local autoCompleteHandlers = {"OnTabPressed", "OnEnterPressed", "OnTextChanged", "OnChar", "OnEditFocusLost", "OnEscapePressed"}
 	if params then
 		if inputBox._priorTSMHandlers then return end -- already done
 		inputBox.autoCompleteParams = params
