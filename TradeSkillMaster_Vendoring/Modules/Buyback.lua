@@ -109,7 +109,6 @@ function Buyback:CreateTab()
 					ResetCursor()
 					GameTooltip:ClearLines()
 					GameTooltip:Hide()
-					BattlePetTooltip:Hide()
 					private.hovering = false
 				end
 			}

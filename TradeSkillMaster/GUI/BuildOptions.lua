@@ -182,7 +182,7 @@ local function TSMFillListLayout(content, children)
 	local width = content.width or content:GetWidth() or 0
 	for i = 1, #children do
 		local child = children[i]
-		
+
 		local frame = child.frame
 		frame:ClearAllPoints()
 		frame:Show()
@@ -191,26 +191,26 @@ local function TSMFillListLayout(content, children)
 		else
 			frame:SetPoint("TOPLEFT", children[i-1].frame, "BOTTOMLEFT")
 		end
-		
+
 		if i == #children then
 			frame:SetPoint("BOTTOMLEFT", content)
 		end
-		
+
 		if child.width == "fill" then
 			child:SetWidth(width)
 			frame:SetPoint("RIGHT", content)
-			
+
 			if child.DoLayout then
 				child:DoLayout()
 			end
 		elseif child.width == "relative" then
 			child:SetWidth(width * child.relWidth)
-			
+
 			if child.DoLayout then
 				child:DoLayout()
 			end
 		end
-		
+
 		height = height + (frame.height or frame:GetHeight() or 0)
 	end
 	content.obj.LayoutFinished(content.obj, nil, height)
@@ -232,7 +232,7 @@ function private:CreateCustomPriceFrame()
 	if #customPriceSources == 0 then
 		tinsert(customPriceSources, "<None>")
 	end
-	
+
 	local frameInfo = {
 		type = "Frame",
 		parent = TSMMainFrame1,
@@ -366,7 +366,7 @@ function private:CreateCustomPriceFrame()
 			},
 		},
 	}
-	
+
 	private.customPriceFrame = TSMAPI.GUI:BuildFrame(frameInfo)
 	TSMAPI.Design:SetFrameBackdropColor(private.customPriceFrame)
 end
@@ -375,19 +375,19 @@ function private:FormatCopperCustomPrice(value)
 	value = gsub(value, TSMAPI.Util:StrEscape(TSM.GOLD_TEXT), "g")
 	value = gsub(value, TSMAPI.Util:StrEscape(TSM.SILVER_TEXT), "s")
 	value = gsub(value, TSMAPI.Util:StrEscape(TSM.COPPER_TEXT), "c")
-	
+
 	for copperPart in gmatch(value,"([0-9]+c)") do
 		value = gsub(value, copperPart, gsub(copperPart, "c", TSM.COPPER_TEXT))
 	end
-	
+
 	for silverPart in gmatch(value,"([0-9]+s)") do
 		value = gsub(value, silverPart, gsub(silverPart, "s", TSM.SILVER_TEXT))
 	end
-	
+
 	for goldPart in gmatch(value,"([0-9]+g)") do
 		value = gsub(value, goldPart, gsub(goldPart, "g", TSM.GOLD_TEXT))
 	end
-	
+
 	return value
 end
 
@@ -463,7 +463,6 @@ function private:CreateWidget(wType, parent, args)
 			GameTooltip:Show()
 		end)
 		widget:SetCallback("OnLeave", function()
-			BattlePetTooltip:Hide()
 			GameTooltip:Hide()
 		end)
 	end

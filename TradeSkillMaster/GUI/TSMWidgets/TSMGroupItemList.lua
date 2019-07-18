@@ -66,41 +66,41 @@ local function UpdateScrollFrame(self)
 		v.iconFrame.icon:SetTexture("")
 		v:Hide()
 	end
-	
+
 	local rowData = {}
 	for _, data in ipairs(self:GetParent().list) do
 		if not data.filtered then
 			tinsert(rowData, data)
 		end
 	end
-	
+
 	local maxRows = floor((self.height-5)/(ROW_HEIGHT+2))
 	FauxScrollFrame_Update(self, #(rowData), maxRows-1, ROW_HEIGHT)
 	local offset = FauxScrollFrame_GetOffset(self)
 	local displayIndex = 0
-	
+
 	-- make the rows bigger if the scroller isn't showing
 	if self:IsVisible() then
 		rows[1]:SetPoint("TOPRIGHT", self:GetParent(), -26, 0)
 	else
 		rows[1]:SetPoint("TOPRIGHT", self:GetParent(), -10, 0)
 	end
-	
+
 	for index, data in ipairs(rowData) do
 		if index >= offset and displayIndex < maxRows then
 			displayIndex = displayIndex + 1
 			local row = rows[displayIndex]
-			
+
 			row.label:SetText(data.link)
 			row.value = data.value
 			row.data = data
-			
+
 			if data.selected then
 				row:LockHighlight()
 			else
 				row:UnlockHighlight()
 			end
-			
+
 			if data.icon then
 				row.iconFrame.icon:SetTexture(data.icon)
 				ShowIcon(row)
@@ -133,8 +133,8 @@ local function UpdateRows(parent)
 				TSMAPI.Util:SafeTooltipLink(self.data.link)
 				GameTooltip:Show()
 			end)
-			row:SetScript("OnLeave", function() GameTooltip:Hide() BattlePetTooltip:Hide() end)
-			
+			row:SetScript("OnLeave", function() GameTooltip:Hide() end)
+
 			if i > 1 then
 				row:SetPoint("TOPLEFT", parent.rows[i-1], "BOTTOMLEFT", 0, -2)
 				row:SetPoint("TOPRIGHT", parent.rows[i-1], "BOTTOMRIGHT", 0, -2)
@@ -142,7 +142,7 @@ local function UpdateRows(parent)
 				row:SetPoint("TOPLEFT", parent, "TOPLEFT", 0, 0)
 				row:SetPoint("TOPRIGHT", parent, "TOPRIGHT", 4, 0)
 			end
-			
+
 			-- highlight / selection texture for the row
 			local highlightTex = row:CreateTexture()
 			highlightTex:SetTexture("Interface\\Buttons\\UI-Listbox-Highlight")
@@ -150,20 +150,20 @@ local function UpdateRows(parent)
 			highlightTex:SetPoint("BOTTOMLEFT")
 			highlightTex:SetAlpha(0.7)
 			row:SetHighlightTexture(highlightTex)
-			
+
 			-- icon that goes to the left of the text
 			local iconFrame = CreateFrame("Frame", nil, row)
 			iconFrame:SetHeight(ROW_HEIGHT-2)
 			iconFrame:SetWidth(ROW_HEIGHT-2)
 			iconFrame:SetPoint("TOPLEFT")
 			row.iconFrame = iconFrame
-			
+
 			-- texture that goes inside the iconFrame
 			local iconTexture = iconFrame:CreateTexture(nil, "BACKGROUND")
 			iconTexture:SetAllPoints(iconFrame)
 			iconTexture:SetVertexColor(1, 1, 1)
 			iconFrame.icon = iconTexture
-			
+
 			local label = row:CreateFontString(nil, "OVERLAY")
 			label:SetFont(TSMAPI.Design:GetContentFont("normal"))
 			label:SetJustifyH("LEFT")
@@ -172,7 +172,7 @@ local function UpdateRows(parent)
 			label:SetPoint("BOTTOMRIGHT", 10, 0)
 			TSMAPI.Design:SetWidgetTextColor(label)
 			row.label = label
-			
+
 			parent.rows[i] = row
 		end
 	end
@@ -182,7 +182,7 @@ end
 local function OnButtonClick(self)
 	local selected = {}
 	local rows, rowData
-	
+
 	if self.type == "Add" then
 		rows = self.obj.leftFrame.scrollFrame.rows
 		rowData = self.obj.leftFrame.list
@@ -191,7 +191,7 @@ local function OnButtonClick(self)
 		rowData = self.obj.rightFrame.list
 	end
 	if not rows then error("Invalid type") end
-	
+
 	local temp = {}
 	for _, row in pairs(rows) do
 		if row.data and row.data.selected and row.value then
@@ -201,7 +201,7 @@ local function OnButtonClick(self)
 			tinsert(selected, row.value)
 		end
 	end
-	
+
 	for _, data in pairs(rowData) do
 		if data.selected and data.value and not temp[data.value] then
 			data.selected = false
@@ -257,7 +257,7 @@ local function OnFilterSet(self)
 		TSM:Print("Invalid filter.")
 		return
 	end
-	
+
 	for _, list in ipairs({self.obj.leftFrame.list, self.obj.rightFrame.list}) do
 		for _, info in ipairs(list) do
 			local selected = TSMAPI.ItemFilter:MatchesFilter(filterInfo, info.link, TSMAPI:GetCustomPriceValue(TSM.db.profile.groupFilterPrice, TSMAPI.Item:ToItemString(info.link)))
@@ -313,7 +313,7 @@ local methods = {
 		self.frame.leftTitle.index = 1
 		self.frame.rightTitle.index = 1
 	end,
-	
+
 	["OnHeightSet"] = function(self, height)
 		if height == 100 then return end
 		self.leftScrollFrame.height = self.frame:GetHeight() - 85
@@ -321,7 +321,7 @@ local methods = {
 		UpdateRows(self.leftScrollFrame)
 		UpdateRows(self.rightScrollFrame)
 	end,
-	
+
 	["SetListCallback"] = function(self, callback)
 		self.GetListCallback = callback
 		self.leftFrame.list = nil
@@ -329,7 +329,7 @@ local methods = {
 		UpdateScrollFrame(self.leftScrollFrame)
 		UpdateScrollFrame(self.rightScrollFrame)
 	end,
-	
+
 	["SetTitle"] = function(self, side, list)
 		TSMAPI:Assert(side == "left" or side == "right")
 		if strlower(side) == "left" then
@@ -353,14 +353,14 @@ local function Constructor()
 	local name = "TSMGroupItemList" .. AceGUI:GetNextWidgetNum(Type)
 	local frame = CreateFrame("Frame", name, UIParent)
 	frame:Hide()
-	
+
 	local leftFrame = CreateFrame("Frame", name.."LeftFrame", frame)
 	leftFrame:SetPoint("TOPLEFT", 0, -80)
 	leftFrame:SetPoint("BOTTOMRIGHT", frame, "BOTTOM", -7, 0)
 	TSMAPI.Design:SetContentColor(leftFrame)
 	leftFrame.list = {}
 	frame.leftFrame = leftFrame
-	
+
 	local leftTitle = CreateFrame("Button", nil, frame)
 	leftTitle:SetPoint("BOTTOMLEFT", leftFrame, "TOPLEFT", 8, 0)
 	leftTitle:SetPoint("BOTTOMRIGHT", leftFrame, "TOPRIGHT", -8, 0)
@@ -389,21 +389,21 @@ local function Constructor()
 	end)
 	leftTitle:SetScript("OnLeave", function() GameTooltip:Hide() end)
 	frame.leftTitle = leftTitle
-	
+
 	local leftSF = CreateFrame("ScrollFrame", name.."LeftFrameScrollFrame", leftFrame, "FauxScrollFrameTemplate")
 	leftSF:SetPoint("TOPLEFT", 5, -5)
 	leftSF:SetPoint("BOTTOMRIGHT", -5, 5)
 	leftSF:SetScript("OnVerticalScroll", function(self, offset)
-		FauxScrollFrame_OnVerticalScroll(self, offset, ROW_HEIGHT, function() UpdateScrollFrame(self) end) 
+		FauxScrollFrame_OnVerticalScroll(self, offset, ROW_HEIGHT, function() UpdateScrollFrame(self) end)
 	end)
 	leftFrame.scrollFrame = leftSF
-	
+
 	local leftScrollBar = _G[leftSF:GetName().."ScrollBar"]
 	leftScrollBar:ClearAllPoints()
 	leftScrollBar:SetPoint("BOTTOMRIGHT")
 	leftScrollBar:SetPoint("TOPRIGHT")
 	leftScrollBar:SetWidth(12)
-	
+
 	local thumbTex = leftScrollBar:GetThumbTexture()
 	thumbTex:SetPoint("CENTER")
 	TSMAPI.Design:SetFrameColor(thumbTex)
@@ -411,14 +411,14 @@ local function Constructor()
 	thumbTex:SetWidth(leftScrollBar:GetWidth())
 	_G[leftScrollBar:GetName().."ScrollUpButton"]:Hide()
 	_G[leftScrollBar:GetName().."ScrollDownButton"]:Hide()
-	
+
 	local rightFrame = CreateFrame("Frame", name.."RightFrame", frame)
 	rightFrame:SetPoint("TOPLEFT", frame, "TOP", 7, -80)
 	rightFrame:SetPoint("BOTTOMRIGHT", 0, 0)
 	TSMAPI.Design:SetContentColor(rightFrame)
 	rightFrame.list = {}
 	frame.rightFrame = rightFrame
-	
+
 	local rightTitle = CreateFrame("Button", nil, frame)
 	rightTitle:SetPoint("BOTTOMLEFT", rightFrame, "TOPLEFT", 8, 0)
 	rightTitle:SetPoint("BOTTOMRIGHT", rightFrame, "TOPRIGHT", -8, 0)
@@ -447,21 +447,21 @@ local function Constructor()
 	end)
 	rightTitle:SetScript("OnLeave", function() GameTooltip:Hide() end)
 	frame.rightTitle = rightTitle
-	
+
 	local rightSF = CreateFrame("ScrollFrame", name.."RightFrameScrollFrame", rightFrame, "FauxScrollFrameTemplate")
 	rightSF:SetPoint("TOPLEFT", 5, -5)
 	rightSF:SetPoint("BOTTOMRIGHT", -5, 5)
 	rightSF:SetScript("OnVerticalScroll", function(self, offset)
-		FauxScrollFrame_OnVerticalScroll(self, offset, ROW_HEIGHT, function() UpdateScrollFrame(self) end) 
+		FauxScrollFrame_OnVerticalScroll(self, offset, ROW_HEIGHT, function() UpdateScrollFrame(self) end)
 	end)
 	rightFrame.scrollFrame = rightSF
-	
+
 	local rightScrollBar = _G[rightSF:GetName().."ScrollBar"]
 	rightScrollBar:ClearAllPoints()
 	rightScrollBar:SetPoint("BOTTOMRIGHT")
 	rightScrollBar:SetPoint("TOPRIGHT")
 	rightScrollBar:SetWidth(12)
-	
+
 	local thumbTex = rightScrollBar:GetThumbTexture()
 	thumbTex:SetPoint("CENTER")
 	TSMAPI.Design:SetFrameColor(thumbTex)
@@ -469,14 +469,14 @@ local function Constructor()
 	thumbTex:SetWidth(rightScrollBar:GetWidth())
 	_G[rightScrollBar:GetName().."ScrollUpButton"]:Hide()
 	_G[rightScrollBar:GetName().."ScrollDownButton"]:Hide()
-	
-	
+
+
 	local label = TSM.GUI:CreateLabel(frame, "normal")
 	label:SetText(L["Filter:"])
 	label:SetPoint("TOPLEFT", 0, -5)
 	label:SetHeight(20)
 	label:SetJustifyV("CENTER")
-	
+
 	local filter = TSM.GUI:CreateInputBox(frame)
 	filter:SetPoint("BOTTOMLEFT", label, "BOTTOMRIGHT", 2, 0)
 	filter:SetHeight(20)
@@ -484,7 +484,7 @@ local function Constructor()
 	filter:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
 	filter:SetScript("OnEditFocusLost", OnFilterSet)
 	filter.tooltip = L["Here you can filter the item lists below. You can enter a simple string to filter by, or a more complex filter which includes item level, rarity, price, etc. Ex: '/weapon/i600/epic/100g/500g'"]
-	
+
 	local line = TSM.GUI:CreateHorizontalLine(frame, 0)
 	line:SetPoint("TOPLEFT", 0, -58)
 	line:SetPoint("TOPRIGHT", 0, -58)
@@ -498,7 +498,7 @@ local function Constructor()
 	ignoreCheckBox:SetPoint("BOTTOMLEFT", filter, "BOTTOMRIGHT", 20, 5)
 	ignoreCheckBox:SetPoint("TOPRIGHT", 0, -2)
 	ignoreCheckBox:SetCallback("OnValueChanged", OnIgnoreChanged)
-	
+
 	local addBtn = TSM.GUI:CreateButton(frame, 18)
 	addBtn:SetPoint("TOPLEFT", 0, -33)
 	addBtn:SetWidth(170)
@@ -506,7 +506,7 @@ local function Constructor()
 	addBtn:SetText(L["Add >>>"])
 	addBtn.type = "Add"
 	addBtn:SetScript("OnClick", OnButtonClick)
-	
+
 	local removeBtn = TSM.GUI:CreateButton(frame, 18)
 	removeBtn:SetPoint("TOPRIGHT", 0, -33)
 	removeBtn:SetWidth(170)
@@ -515,7 +515,7 @@ local function Constructor()
 	removeBtn.type = "Remove"
 	removeBtn:SetScript("OnClick", OnButtonClick)
 	removeBtn.tooltip = L["You can hold shift while clicking this button to leave the items in the parent group (if one exists) rather than removing from all groups."]
-	
+
 	local clearBtn = TSM.GUI:CreateButton(frame, 16)
 	clearBtn:SetPoint("BOTTOMLEFT", addBtn, "BOTTOMRIGHT", 15, 0)
 	clearBtn:SetPoint("BOTTOMRIGHT", removeBtn, "BOTTOMLEFT", -15, 0)
@@ -523,7 +523,7 @@ local function Constructor()
 	clearBtn:SetText(L["Clear Selection"])
 	clearBtn:SetScript("OnClick", OnClearButtonClicked)
 	clearBtn.tooltip = L["Deselects all items in both columns."]
-	
+
 
 	local widget = {
 		leftFrame = leftFrame,
@@ -539,7 +539,7 @@ local function Constructor()
 	for method, func in pairs(methods) do
 		widget[method] = func
 	end
-	
+
 	addBtn.obj = widget
 	removeBtn.obj = widget
 	widget.ignoreCheckBox.obj = widget

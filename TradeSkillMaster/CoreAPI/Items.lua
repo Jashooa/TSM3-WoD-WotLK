@@ -11,7 +11,6 @@
 local TSM = select(2, ...)
 local Items = TSM:NewModule("Items", "AceEvent-3.0")
 local private = {itemInfoCache=setmetatable({}, {__mode="kv"}), bonusIdCache=setmetatable({}, {__mode="kv"}), bonusIdTemp={}, scanTooltip=nil, pendingItems={}}
-local PET_CAGE_ITEM_INFO = {isDefault=true, 0, "Battle Pets", "", 1, "", "", 0}
 local WEAPON, ARMOR = GetAuctionItemClasses()
 local BATTLE_PET_SUBCLASSES = {GetAuctionItemSubClasses(11)}
 
@@ -33,14 +32,8 @@ function TSMAPI.Item:ToItemString(item)
 		item = item:trim()
 	end
 
-	-- test if it's already (likely) an item string or battle pet string
-	if strmatch(item, "^p:([0-9%-:]+)$") then
-		result = strjoin(":", strmatch(item, "^(p):(%d+:%d+:%d+)"))
-		if result then
-			return result
-		end
-		return item
-	elseif strmatch(item, "^i:([0-9%-:]+)$") then
+    -- test if it's already (likely) an item string
+    if strmatch(item, "^i:([0-9%-:]+)$") then
 		item = gsub(gsub(item, ":0$", ""), ":0$", "") -- remove extra zeroes
 		return private:FixItemString(item)
 	end
@@ -56,20 +49,6 @@ function TSMAPI.Item:ToItemString(item)
 	if result then
 		result = gsub(gsub(result, ":0$", ""), ":0$", "") -- remove extra zeroes
 		return private:FixItemString(result)
-	end
-
-	-- test if it's an old style battle pet string (or if it was a link)
-	result = strjoin(":", strmatch(item, "^battle(p)et:(%d+:%d+:%d+)"))
-	if result then
-		return result
-	end
-	result = strjoin(":", strmatch(item, "^battle(p)et:(%d+)$"))
-	if result then
-		return result
-	end
-	result = strjoin(":", strmatch(item, "^(p):(%d+:%d+:%d+)"))
-	if result then
-		return result
 	end
 
 	-- test if it's a long item string
@@ -115,10 +94,7 @@ function TSMAPI.Item:ToItemLink(itemString)
 	if not itemString then return "?" end
 	local link = select(2, TSMAPI.Item:GetInfo(itemString))
 	if link then return link end
-	if strmatch(itemString, "p:") then
-		local _, speciesId, level, quality = (":"):split(itemString)
-		return "|cffff0000|Hbattlepet"..strjoin(":", speciesId, level or 0, quality or 0, 0, 0, 0).."|h[Unknown Pet]|h|r"
-	elseif strmatch(itemString, "i:") then
+    if strmatch(itemString, "i:") then
 		return "|cffff0000|H"..gsub(itemString, "i:", "item:").."|h[Unknown Item]|h|r"
 	end
 	return "?"
@@ -170,26 +146,6 @@ function TSMAPI.Item:GetInfo(item)
 					private.itemInfoCache[itemString] = {GetItemInfo(itemId)}
 				end
 			end
-		elseif strmatch(itemString, "^p:") then
-			local _, speciesID, level, quality, health, power, speed, petID = strsplit(":", itemString)
-			if not tonumber(speciesID) then return end
-			level, quality, health, power, speed, petID = level or 0, quality or 0, health or 0, power or 0, speed or 0, petID or "0"
-
-			local name, texture, petType = C_PetJournal.GetPetInfoBySpeciesID(tonumber(speciesID))
-			local iSubType = petType and BATTLE_PET_SUBCLASSES[petType] or ""
-			if not name or name == "" or tonumber(name) or not texture then return end
-			level, quality = tonumber(level), tonumber(quality)
-			petID = strsub(petID, 1, (strfind(petID, "|") or #petID) - 1)
-			if not ITEM_QUALITY_COLORS[quality] then return end
-			local itemLink = ITEM_QUALITY_COLORS[quality].hex .. "|Hbattlepet:" .. speciesID .. ":" .. level .. ":" .. quality .. ":" .. health .. ":" .. power .. ":" .. speed .. ":" .. petID .. "|h[" .. name .. "]|h|r"
-			if PET_CAGE_ITEM_INFO.isDefault then
-				local data = {select(5, GetItemInfo(82800))}
-				if #data > 0 then
-					PET_CAGE_ITEM_INFO = data
-				end
-			end
-			local minLvl, iType, _, stackSize, _, _, vendorPrice = unpack(PET_CAGE_ITEM_INFO)
-			private.itemInfoCache[itemString] = {name, itemLink, quality, level, minLvl, iType, iSubType, stackSize, "", texture, vendorPrice}
 		else
 			TSMAPI:Assert(false, format("Invalid item string: '%s'", tostring(itemString)))
 		end
@@ -207,10 +163,6 @@ function TSMAPI.Item:IsSoulbound(...)
 	if type(firstArg) == "string" then
 		TSMAPI:Assert(numArgs <= 2, "Too many arguments provided with itemString")
 		itemString, ignoreBOA = ...
-		if strmatch(itemString, "^p:") then
-			-- battle pets are not soulbound
-			return
-		end
 	elseif type(firstArg) == "number" then
 		bag, slot, ignoreBOA = ...
 		TSMAPI:Assert(slot, "Second argument must be slot within bag")
@@ -270,11 +222,6 @@ function TSMAPI.Item:IsSoulbound(...)
 end
 
 function TSMAPI.Item:IsCraftingReagent(itemLink)
-	if strmatch(itemLink, "battlepet:") or strmatch(itemLink, "^p:") then
-		-- ignore battle pets
-		return false
-	end
-
 	--workaround for recipes having the item info and crafting reagent in the tooltip
 	if select(6, TSMAPI.Item:GetInfo(itemLink)) == select(7, GetAuctionItemClasses()) then
 		return false

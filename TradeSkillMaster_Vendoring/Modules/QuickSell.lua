@@ -221,7 +221,6 @@ function QuickSell:CreateTab(parent)
 					ResetCursor()
 					GameTooltip:ClearLines()
 					GameTooltip:Hide()
-					BattlePetTooltip:Hide()
 					private.hovering = false
 				end
 			}

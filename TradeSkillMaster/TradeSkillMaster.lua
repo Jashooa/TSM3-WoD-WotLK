@@ -184,20 +184,6 @@ function TSM:OnInitialize()
 			TSM.db.profile.items = newData
 		end
 
-		-- fix some bad battlepet itemStrings (changed again in 3.1)
-		local toFix = {}
-		for itemString, groupPath in pairs(TSM.db.profile.items) do
-			if strmatch(itemString, "^p:%d+:%d+$") then
-				tinsert(toFix, itemString)
-			end
-		end
-		for _, itemString in ipairs(toFix) do
-			local newItemString = strmatch(itemString, "^p:%d+")
-			local oldGroup = TSM.db.profile.items[itemString]
-			TSM.db.profile.items[itemString] = nil
-			TSM.db.profile.items[newItemString] = TSM.db.profile.items[newItemString] or oldGroup
-		end
-
 		-- fix some bad variant itemStrings (fixed in 3.3.8)
 		wipe(toFix)
 		for itemString, groupPath in pairs(TSM.db.profile.items) do
@@ -217,7 +203,7 @@ function TSM:OnInitialize()
 		-- fix some bad item links which got into the items table and some old bonusId strings
 		wipe(toFix)
 		for itemString, groupPath in pairs(TSM.db.profile.items) do
-			if strmatch(itemString, "^p:%d+:%d+:%d+:%d+:%d+:%d+$") or strmatch(itemString, "^\124c[0-9a-fA-F]+\124H.+\124h\124r$") or select(2, gsub(itemString, ":", "")) > 2 then
+			if strmatch(itemString, "^\124c[0-9a-fA-F]+\124H.+\124h\124r$") or select(2, gsub(itemString, ":", "")) > 2 then
 				tinsert(toFix, itemString)
 			end
 		end
@@ -301,8 +287,6 @@ function TSM:OnInitialize()
 		end,
 	})
 
-	-- Cache battle pet names
-	for i=1, C_PetJournal.GetNumPets() do C_PetJournal.GetPetInfoByIndex(i) end
 	-- force a garbage collection
 	collectgarbage()
 end

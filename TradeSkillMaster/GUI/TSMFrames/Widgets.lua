@@ -134,7 +134,7 @@ function GUI:CreateStatusBar(parent, baseName)
 			end
 		end
 	end
-	
+
 	local function SetStatusText(self, text)
 		self.text:SetText(text)
 	end
@@ -147,7 +147,7 @@ function GUI:CreateStatusBar(parent, baseName)
 	frame:SetFrameLevel(level+1)
 	frame.UpdateStatus = UpdateStatus
 	frame.SetStatusText = SetStatusText
-	
+
 	-- minor status bar (gray one)
 	local statusBar = CreateFrame("STATUSBAR", baseName.."-Minor", frame, "TextStatusBar")
 	statusBar:SetOrientation("HORIZONTAL")
@@ -163,7 +163,7 @@ function GUI:CreateStatusBar(parent, baseName)
 	ag:SetLooping("Bounce")
 	statusBar.ag = ag
 	frame.minorStatusBar = statusBar
-	
+
 	-- major status bar (main blue one)
 	local statusBar = CreateFrame("STATUSBAR", baseName.."-Major", frame, "TextStatusBar")
 	statusBar:SetOrientation("HORIZONTAL")
@@ -179,7 +179,7 @@ function GUI:CreateStatusBar(parent, baseName)
 	ag:SetLooping("Bounce")
 	statusBar.ag = ag
 	frame.majorStatusBar = statusBar
-	
+
 	local textFrame = CreateFrame("Frame", nil, frame)
 	textFrame:SetFrameLevel(level+4)
 	textFrame:SetAllPoints(frame)
@@ -188,7 +188,7 @@ function GUI:CreateStatusBar(parent, baseName)
 	TSMAPI.Design:SetWidgetTextColor(text)
 	text:SetPoint("CENTER")
 	frame.text = text
-	
+
 	return frame
 end
 
@@ -244,7 +244,7 @@ function GUI:CreateMovableFrame(name, defaults, parent)
 	options.defaults = defaults
 	TSM.db.global.frameStatus[name] = options
 	options.hasLoaded = nil
-	
+
 	local frame = CreateFrame("Frame", name, parent)
 	frame:Hide()
 	frame:SetHeight(options.height)
@@ -289,7 +289,7 @@ function GUI:CreateMovableFrame(name, defaults, parent)
 	frame:SetScript("OnShow", frame.RefreshPosition)
 	frame.options = options
 	tinsert(private.movableFrames, frame)
-	
+
 	return frame
 end
 
@@ -304,7 +304,7 @@ function GUI:ResetFrames()
 			frame:RefreshPosition()
 		end
 	end
-	
+
 	-- explicitly reset bankui since it can't easily use TSM.GUI:CreateMovableFrame
 	TSM:ResetBankUIFramePosition()
 end
@@ -339,6 +339,5 @@ function private.ShowTooltip(self)
 end
 
 function private.HideTooltip()
-	BattlePetTooltip:Hide()
 	GameTooltip:Hide()
 end

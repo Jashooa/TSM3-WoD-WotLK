@@ -22,12 +22,9 @@ local private = {tooltipInfo={}, tooltipLines={lastUpdate=0, modifier=0}}
 -- ============================================================================
 
 function Tooltips:OnInitialize()
-	LibExtraTip:AddCallback({type = "battlepet", callback = private.LoadTooltip})
 	LibExtraTip:AddCallback({type = "item", callback = private.LoadTooltip})
 	LibExtraTip:RegisterTooltip(GameTooltip)
 	LibExtraTip:RegisterTooltip(ItemRefTooltip)
-	LibExtraTip:RegisterTooltip(BattlePetTooltip)
-	LibExtraTip:RegisterTooltip(FloatingBattlePetTooltip)
 	local orig = OpenMailAttachment_OnEnter
 	OpenMailAttachment_OnEnter = function(self, index)
 		private.lastMailTooltipUpdate = private.lastMailTooltipUpdate or 0

@@ -152,8 +152,6 @@ local function GetSearchFilterOptions(searchTerm)
 	-- deal with item strings
 	if strmatch(parts[1], "^item:%d+$") then
 		parts[1] = gsub(parts[1], "item:", "i:")
-	elseif strmatch(parts[1], "^battlepet:%d+$") then
-		parts[1] = gsub(parts[1], "battlepet:", "p:")
 	end
 	if strmatch(parts[1], "^[ip]:%d+$") then
 		parts[1] = TSMAPI.Item:GetInfo(parts[1])

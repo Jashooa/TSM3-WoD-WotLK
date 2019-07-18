@@ -140,7 +140,7 @@ function TSMAPI.GUI:BuildFrame(info)
 		TSMAPI:Assert(not info.scripts, "Scripts are not supported for ItemLinkLabels"..private:GetDebugString(info))
 		widget = CreateFrame("Button", nil, info.parent)
 		widget:SetScript("OnEnter", function(self) if self.link then GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT") TSMAPI.Util:SafeTooltipLink(self.link) GameTooltip:Show() end end)
-		widget:SetScript("OnLeave", function() BattlePetTooltip:Hide() GameTooltip:Hide() end)
+		widget:SetScript("OnLeave", function() GameTooltip:Hide() end)
 		widget:SetScript("OnClick", function(self) if self.link then HandleModifiedItemClick(self.link) end end)
 		widget:SetHeight(info.textHeight)
 		widget:Show()
@@ -197,24 +197,24 @@ function TSMAPI.GUI:BuildFrame(info)
 		end
 	end
 	TSMAPI:Assert(widget, "Invalid widget type: "..tostring(info.type)..private:GetDebugString(info))
-	
+
 	if not info.handlers then
 		info.handlers = (info.parent and private.frameInfo[info.parent] and private.frameInfo[info.parent].handlers and private.frameInfo[info.parent].handlers[info.key])
 	end
 	private.frameInfo[widget] = info
 	widget.tsmFrameType = info.type
-	
+
 	-- add to parent table at specified key
 	if info.parent and info.key then
 		info.parent[info.key] = widget
 	end
-	
+
 	-- set size
 	if info.size then
 		widget:SetWidth(info.size[1] or 0)
 		widget:SetHeight(info.size[2] or 0)
 	end
-	
+
 	-- set points
 	if info.points == "ALL" then
 		widget:ClearAllPoints()
@@ -247,12 +247,12 @@ function TSMAPI.GUI:BuildFrame(info)
 			widget:SetPoint(unpack(pointInfo))
 		end
 	end
-	
+
 	-- set hidden if applicable
 	if info.hidden then
 		widget:Hide()
 	end
-	
+
 	-- set scripts
 	TSMAPI:Assert(not info.scripts or info.handlers, "No handlers found"..private:GetDebugString(info))
 	for _, script in ipairs(info.scripts or {}) do
@@ -273,7 +273,7 @@ function TSMAPI.GUI:BuildFrame(info)
 				handler = info.handlers[script]
 			end
 			widget:SetScript(script, handler)
-			
+
 			if info.type == "Button" then
 				-- For some strange reason, WoW allows clicking of buttons which are hidden, so let's fix that.
 				TSMAPI:Assert(script ~= "OnShow" and script ~= "OnHide", "OnShow/OnHide are not allowed on buttons:"..private:GetDebugString(info))
@@ -290,7 +290,7 @@ function TSMAPI.GUI:BuildFrame(info)
 			end
 		end
 	end
-	
+
 	-- set text attributes
 	if info.text then
 		widget:SetText(info.text)
@@ -301,7 +301,7 @@ function TSMAPI.GUI:BuildFrame(info)
 	if info.textFont then
 		widget:SetFont(unpack(info.textFont))
 	end
-	
+
 	-- set type-specific attributes for some types
 	if info.type == "Frame" or info.type == "MovableFrame" then
 		-- create children
@@ -357,7 +357,7 @@ function TSMAPI.GUI:BuildFrame(info)
 			info.parent[info._sbKey] = statusBar
 		end
 	end
-	
+
 	return widget
 end
 
