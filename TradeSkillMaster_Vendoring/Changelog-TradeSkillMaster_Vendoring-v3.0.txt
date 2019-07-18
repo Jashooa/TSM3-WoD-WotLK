@@ -1,0 +1,168 @@
+tag v3.0
+dfb21af41a00e6dfec360b14406261c1ab24f18f
+TSMBot <admin@tradeskillmaster.com>
+2015-12-14 00:03:53 +0000
+
+
+
+--------------------
+
+Sapu94:
+	- Fixed changelog name.
+	- Updated changelog.
+	- Fixed typo.
+	- Fixed name of QuickSell.lua
+	- Localized remaining strings.
+	- Using new settings APIs.
+Craig Gambino:
+	- Remove anyBought, unnecessary
+Bart39:
+	- add alts auctions to operation restock sources - ADDON-510
+	- modify positions of buttons on quick sell tab so they are not so close together - ADDON-486
+Sapu94:
+	- Fixed typo.
+	- Removed some actual default UI globals from .globals file.
+Bart39:
+	- fix some of the failed globals test
+	- updated for patch 6.2
+Craig Gambino:
+	- Split-Buy improvements
+	- Provide more compatibility with other addons. ADDON-284
+	- Improvements for the "buy bulk" from vendor
+Bart39:
+	- fix issue with displaying default merchant tab - ADDON-222
+	- another issue with MaxAfford function - ADDON-249
+	- fix issues with GetMaxAfford
+Craig Gambino:
+	- Code modifications
+Bart39:
+	- don't set vendoring as default merchant tab on install - up to the user to decide
+	- dont enable buttons if private.frame doesn't yet exist (e.g. from auto sell trash)
+Craig Gambino:
+	- Auto sell greys option
+	- Updating to TSM:Printf
+	- >=
+Bart39:
+	- fix an issue with items added to a group ignoring random enchants not being picked up by group sell - Psytech - might want to review this
+Craig Gambino:
+	- Visual issue with vendoring not being default tab. (Why would you do that!?)  ADDON-93.
+	- Buy only what you can afford.
+	- Adding name to Sell All Button.
+	- Name Sell All button
+	- Fix null check. ADDON-45
+	- Increasing max expires
+	- Increasing 'restock' quantity
+	- Enable sorting
+	- Adding support for inspecting
+	- Fixing credits
+	- Help Plates
+Sapu94:
+	- Added myself as an author so TSM will recognize this as an official module.
+Craig Gambino:
+	- Sell/buy enabling
+	- Fixing disable selection
+	- Changing to use left-click for QuickSell ignore.
+	- Show 'Buy' cursor on Buyback / Buy tabs
+	- fix for vendor show
+	- Selections and text color for limited items
+	- Removing local quality checks
+	- Filtering
+	- Operation wording and logic
+	- Labelling, groups logic
+	- Only restock to the amount available
+	- Temporarily set merchant filter to 'all' during buy operations
+	- Soulbound issues
+	- IsSoulbound option to QuickSell
+	- Filter out white items
+	- updating
+	- Options wording
+	- Tooltip wording
+	- Add SEll BOE button
+	- Hide grouped items by default
+	- QuickSell
+	- Quicksell Updates
+	- Options
+	- fix typo
+	- Update Repair button logic
+	- Add mail and AH as sources for groups
+	- enable buttons bug
+	- Formatting
+	- Attempt to color things already known
+	- Color "unusable" stuff
+	- UI cleanup
+	- Button re-architecture
+	- Buy from vendor only by maxstack
+	- Change bag updates
+	- Hide/Show logic for repairs/gold
+	- update to TSM_Logo widget
+	- Merchant Show/Update logic
+	- Disenchant -> Destroy
+	- Repair buttons
+	- Code Review Fixes
+Sapu94:
+	- Added a bunch of review comments and removed a few unused variables.
+	- Removed all trailing whitespace.
+Craig Gambino:
+	- Update GUI
+	- GUI updates
+	- Updating QuickSell
+	- Update to TSM3 GUI
+	- Fix options bug
+	- Threading
+	- More threading
+	- Implement thread in QuickSell
+	- Group Operations
+	- More TSM3 Conversion
+	- Round 2 of updating
+	- Preliminary Conversion to TSM3
+Sapu94:
+	- Updated enUS.lua locale file and operation / options structure for TSM.
+Craig Gambino:
+	- Groups
+	- More sell options
+	- Adding options
+Sapu94:
+	- Revert "Updated TSMAPI calls."
+	This reverts commit 542125581528d3e9401613e0a6e3c039cedfdb2b.
+	- Updated TSMAPI calls.
+Craig Gambino:
+	- Refactor
+	- Tab gold update
+	- Update when switching between vendors
+	- Tooltips
+	- Changelog
+	- shift click buy/sell
+	- Removing the notion of ratio, going to disenchant
+	- Adding expired number to QuickSell
+	- Fix extra currency updating
+	- Fixing an edge case with custom vendor prices
+	- Options fixes
+	- Hide Grouped on QuickSell
+	- moved pricing calculations up
+	- bugfix
+	- bugfix
+	- Correct an indexing issue with buying
+	- Additional settings
+	- Bug and UI fixes
+	- Stubs for repair
+	- Preliminary work for auction data
+	- Adding group logic
+	- Adding groups tree
+	- Enable buyback and purchasing of items
+	- Clean up some UI
+	- Adding currencies to tab
+	- Preliminary info for vendor buying
+	- Adding new tabs on merchant frame
+Sapu94:
+	- Added locale files. A few minor style changes. Added .pkgmeta file and made changes related to that including a changelog and version tags.
+Craig Gambino:
+	- Removing maxQty for operations
+	- Update options
+	- Updated pricing
+	- Updated SellJunk code, cleaned up UI refreshes
+	- SellJunk detection
+	- Adding delays to prevent spamming the button
+	- Hide default blizzard frames
+	- Adding multiple options
+	- Creating options
+	- Initial push of preliminary tsm_vendoring addon
