@@ -140,11 +140,12 @@ function Inbox:CreateTab()
 						OpenMailFrame.updateButtonPositions = true
 						OpenMail_Update()
 						ShowUIPanel(OpenMailFrame)
-						OpenMailFrameInset:SetPoint("TOPLEFT", 4, -80)
+                        OpenMailFrame:SetPoint("TOPLEFT", "InboxFrame", "TOPRIGHT", 40, 0)
 						PlaySound("igSpellBookOpen")
 					else
 						InboxFrame.openMailID = 0
-						HideUIPanel(OpenMailFrame)
+                        HideUIPanel(OpenMailFrame)
+                        OpenMailFrame:SetPoint("TOPLEFT", "InboxFrame", "TOPRIGHT", -10, 0)
 					end
 					InboxFrame_Update()
 				end,
