@@ -1,4 +1,4 @@
-## Interface: 60200
+## Interface: 30300
 ## Title: |cff00ff00TradeSkillMaster_Shopping|r
 ## Notes: Provides an interface for easily viewing, buying, and posting items.
 ## Author: Sapu94, Bart39

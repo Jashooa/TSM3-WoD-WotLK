@@ -1,4 +1,4 @@
-﻿## Interface: 60200
+﻿## Interface: 30300
 ## Title: |cff00ff00TradeSkillMaster_Crafting|r
 ## Notes: Provides a rich profession interface complete with a powerful crafting queue.
 ## Author: Sapu94, Bart39
