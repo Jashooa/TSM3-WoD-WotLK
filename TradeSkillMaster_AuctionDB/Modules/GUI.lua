@@ -214,8 +214,16 @@ function private:UpdateGetAllStatus()
 		private.frame.content.buttonFrame.getAllBtn:Disable()
 		private.frame.content.buttonFrame.fullBtn:Disable()
 		private.frame.content.buttonFrame.groupBtn:Disable()
-	elseif not select(2, CanSendAuctionQuery()) or GetNumAuctionItems("list") > NUM_AUCTION_ITEMS_PER_PAGE then
-		private.frame.content.buttonFrame.getAllStatusText:SetText("|cff990000"..L["Not Ready"])
+    elseif not select(2, CanSendAuctionQuery()) or GetNumAuctionItems("list") > NUM_AUCTION_ITEMS_PER_PAGE then
+        local previous = TSM:GetLastCompleteScanTime() or time()
+        if previous > (time() - 15*60) then
+            local diff = previous + 15*60 - time()
+            local diffMin = math.floor(diff/60)
+            local diffSec = diff - diffMin*60
+            private.frame.content.buttonFrame.getAllStatusText:SetText("|cff990000"..format("Ready in %s min and %s sec", diffMin, diffSec))
+        else
+            private.frame.content.buttonFrame.getAllStatusText:SetText("|cff990000"..L["Not Ready"])
+        end
 		private.frame.content.buttonFrame.getAllBtn:Disable()
 		private.frame.content.buttonFrame.fullBtn:Enable()
 		private.frame.content.buttonFrame.groupBtn:Enable()
