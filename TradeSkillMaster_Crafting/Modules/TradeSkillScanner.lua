@@ -252,11 +252,18 @@ end
 
 function TradeSkillScanner:GetProfessionList()
 	local list = {}
-	local playerName = UnitName("player")
-	if not TSM.db.factionrealm.playerProfessions[playerName] then return list end
+	--[[local playerName = UnitName("player")
+    if not TSM.db.factionrealm.playerProfessions[playerName] then return list end
 	for name, data in pairs(TSM.db.factionrealm.playerProfessions[playerName]) do
 		list[playerName .. "~" .. name] = format("%s %d/%d - %s", name, data.level or "?", data.maxLevel or "?", playerName)
-	end
+    end]]--
+    for playerName, professionData in pairs(TSM.db.factionrealm.playerProfessions) do
+        for name, data in pairs(TSM.db.factionrealm.playerProfessions[playerName]) do
+            if data.link then
+                list[playerName .. "~" .. name] = format("%s %d/%d - %s", name, data.level or "?", data.maxLevel or "?", playerName)
+            end
+        end
+    end
 	return list
 end
 
@@ -297,11 +304,6 @@ end
 
 
 function private.UpdatePlayerTradeSkillsThread(self)
-	if (select(2, GetTradeSkillInfo(1)) ~= "header") then
-		TSM:Print("Tradeskill is not fully loaded, try to scan it later.")
-		return
-    end
-
 	self:SetThreadName("CRAFTING_PLAYER_TRADESKILLS")
 	-- get the player name
 	local playerName = self:WaitForFunction(UnitName, "player")
