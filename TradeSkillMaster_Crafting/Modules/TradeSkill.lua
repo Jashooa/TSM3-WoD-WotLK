@@ -692,7 +692,8 @@ end
 
 function TradeSkill:ClearFilters()
 	Lib_CloseDropDownMenus()
-	local id = TradeSkillLinkDropDown:GetID()
+    --local id = TradeSkillLinkDropDown:GetID()
+    local id = 1
 	local skillupButton = _G["DropDownList" .. id .. "Button1"]
 	if skillupButton and skillupButton.checked and skillupButton.value == CRAFT_IS_MAKEABLE then
 		UIDropDownMenuButton_OnClick(skillupButton)
@@ -703,7 +704,11 @@ function TradeSkill:ClearFilters()
 	end
 	TradeSkillOnlyShowMakeable(false)
 	TradeSkillOnlyShowSkillUps(false)
-	TradeSkillSetFilter(-1, -1)
+    --TradeSkillSetFilter(-1, -1)
+    UIDropDownMenu_SetSelectedID(TradeSkillSubClassDropDown, 1);
+    SetTradeSkillSubClassFilter(0, 1, 1);
+    UIDropDownMenu_SetSelectedID(TradeSkillInvSlotDropDown, 1);
+    SetTradeSkillInvSlotFilter(0, 1, 1);
 	SetTradeSkillItemNameFilter("")
 	if TradeSkillCollapseAllButton.collapsed then
 		TradeSkillCollapseAllButton:Click()

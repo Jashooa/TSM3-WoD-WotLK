@@ -665,7 +665,8 @@ function Professions:UpdateST()
 	local numAvailableAllCache = {}
 	local inventoryTotals = select(4, TSM:GetInventoryTotals())
 	for i = 1, GetNumTradeSkills() do
-		local skillName, skillType, numAvailable, isExpanded, _, numSkillUps = GetTradeSkillInfo(i)
+        local skillName, skillType, numAvailable, isExpanded = GetTradeSkillInfo(i)
+        print(GetTradeSkillInfo(i))
 		TSMAPI:Assert(skillName, "No skill name found for index " .. i)
 		local spellID = TSM:GetSpellID(i)
 		local numAvailableAll, priceText = nil, nil
@@ -738,9 +739,9 @@ function Professions:UpdateST()
 		end
 
 		-- add text for multiple skill-ups
-		if numSkillUps > 1 and skillType == "optimal" then
+		--[[if numSkillUps > 1 and skillType == "optimal" then
 			skillName = skillName .. " <" .. numSkillUps .. ">"
-		end
+		end]]--
 
 		-- set the text for the number available if necessary, add color, and all the leader
 		if numAvailable > 0 or (numAvailableAll and numAvailableAll > 0) then
