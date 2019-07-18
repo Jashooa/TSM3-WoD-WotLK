@@ -351,7 +351,7 @@ function Professions:GetFrameInfo()
 							{
 								type = "Button",
 								key = "createBtn",
-								text = CREATE_PROFESSION,
+								text = CREATE,
 								textHeight = 15,
 								size = { 0, 20 },
 								points = { { "BOTTOMLEFT" }, { "BOTTOMRIGHT", BFC.PARENT, "BOTTOM", -2, 0 } },
