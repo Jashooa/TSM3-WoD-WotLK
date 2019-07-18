@@ -52,40 +52,6 @@ function Groups:CreateTab(parent)
 		handlers = {
 			OnShow = function(self)
 				private.frame = self
-				if not self.helpBtn then
-					local TOTAL_WIDTH = private.frame:GetParent():GetWidth()
-					local helpPlateInfo = {
-						FramePos = {x = 0, y = 70},
-						FrameSize = {width = TOTAL_WIDTH, height = private.frame:GetHeight()},
-						{
-							ButtonPos = {x = 100, y = -20},
-							HighLightBox = {x = 70, y = -35, width = TOTAL_WIDTH-70, height = 30},
-							ToolTipDir = "DOWN",
-							ToolTipText = L["These buttons change what is shown in the mailbox frame. You can view your inbox, automatically mail items in groups, quickly send items to other characters, and more in the various tabs."],
-						},
-						{
-							ButtonPos = {x = 200, y = -200},
-							HighLightBox = {x = 0, y = -65, width = TOTAL_WIDTH, height = 325},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["Here you can select groups with TSM_Mailing operations to be automatically mailed to other characters."],
-						},
-						{
-							ButtonPos = {x = 300, y = -380},
-							HighLightBox = {x = 0, y = -390, width = TOTAL_WIDTH, height = 35},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["Click this button to automatically mail items in the groups which you have selected."],
-						},
-					}
-
-					self.helpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
-					self.helpBtn:SetPoint("TOPLEFT", 50, 100)
-					self.helpBtn:SetScript("OnClick", function() TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, true) end)
-					self.helpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false) end end)
-					if not TSM.db.global.helpPlatesShown.groups then
-						TSM.db.global.helpPlatesShown.groups = true
-						TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false)
-					end
-				end
 			end,
 			OnHide = function() TSMAPI.Delay:Cancel("mailingGroupsRepeat") end,
 			button = {

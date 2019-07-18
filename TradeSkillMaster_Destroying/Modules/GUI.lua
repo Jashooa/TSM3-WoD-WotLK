@@ -191,53 +191,7 @@ function private:CreateDestroyingFrame()
 
 	private.frame.destroyBtn:SetAttribute("type1", "macro")
 	private.frame.destroyBtn:SetAttribute("macrotext1", "")
-
-	local helpPlateInfo = {
-		FramePos = { x = 0, y = 0 },
-		FrameSize = { width = 300, height = 300 },
-		{
-			ButtonPos = { x = 230, y = -150 },
-			HighLightBox = { x = 0, y = -75, width = 300, height = 175 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["Here you can view all items in your bags which can be destroyed (disenchanted, milled, or prospected). They will be destroyed in the order they are listed (top to bottom)."],
-		},
-		{
-			ButtonPos = { x = 20, y = -240 },
-			HighLightBox = { x = 0, y = -250, width = 300, height = 25 },
-			ToolTipDir = "LEFT",
-			ToolTipText = L["This button will combine stacks to allow for maximum milling / prospecting."],
-		},
-		{
-			ButtonPos = { x = 240, y = -265 },
-			HighLightBox = { x = 0, y = -275, width = 300, height = 25 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["This button will destroy (disenchant, mill, or prospect) the next item in the list."],
-		},
-	}
-
-	local mainHelpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
-	mainHelpBtn:SetPoint("TOPLEFT", private.frame, -25, 30)
-	mainHelpBtn:SetScript("OnClick", function() private:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, true) end)
-	mainHelpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then private:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, false) end end)
-
-	if not TSM.db.global.helpPlatesShown.destroyingFrame then
-		TSM.db.global.helpPlatesShown.destroyingFrame = true
-		private:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, false)
-	end
 end
-
-function private:ToggleHelpPlate(frame, info, btn, isUser)
-	if not HelpPlate_IsShowing(info) then
-		HelpPlate:SetParent(frame)
-		HelpPlate:SetFrameStrata("DIALOG")
-		HelpPlate_Show(info, frame, btn, isUser)
-	else
-		HelpPlate:SetParent(UIParent)
-		HelpPlate:SetFrameStrata("DIALOG")
-		HelpPlate_Hide(isUser)
-	end
-end
-
 
 
 -- ============================================================================

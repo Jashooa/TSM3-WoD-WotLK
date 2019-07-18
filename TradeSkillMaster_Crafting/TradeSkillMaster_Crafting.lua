@@ -30,7 +30,6 @@ local settingsInfo = {
 		defaultCraftPriceMethod = { type = "string", default = "first(dbminbuyout, dbmarket)", lastModifiedVersion = 1 },
 		ignoreCharacters = { type = "table", default = {}, lastModifiedVersion = 1 },
 		ignoreGuilds = { type = "table", default = {}, lastModifiedVersion = 1 },
-		helpPlatesShown = { type = "table", default = { profession = nil, groups = nil, gatherSelection = nil, gatheringFrame = nil }, lastModifiedVersion = 1 },
 	},
 	factionrealm = {
 		ignoreAlts = { type = "boolean", default = false, lastModifiedVersion = 1 },

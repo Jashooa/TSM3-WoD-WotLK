@@ -29,18 +29,6 @@ function MerchantTab:OnEnable()
 	MerchantTab:RawHook("MerchantFrame_Update", function(...) if MerchantFrame.selectedTab == 1 or MerchantFrame.selectedTab == 2 then return MerchantTab.hooks.MerchantFrame_Update(...) else private:OnMerchantUpdate() end end,true)
 end
 
-function MerchantTab:ToggleHelpPlate(frame, info, btn, isUser)
-	if not HelpPlate_IsShowing(info) then
-		HelpPlate:SetParent(frame)
-		HelpPlate:SetFrameStrata("DIALOG")
-		HelpPlate_Show(info, frame, btn, isUser)
-	else
-		HelpPlate:SetParent(UIParent)
-		HelpPlate:SetFrameStrata("DIALOG")
-		HelpPlate_Hide(isUser)
-	end
-end
-
 function private:ModifierChanged()
 	if private.frame and private.frame:IsVisible() then
 		if IsControlKeyDown() then

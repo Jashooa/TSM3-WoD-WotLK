@@ -25,7 +25,6 @@ local settingsInfo = {
 		sniperCustomPrice = { type = "string", default = "0c", lastModifiedVersion = 1 },
 		sniperSound = { type = "string", default = TSMAPI:GetNoSoundKey(), lastModifiedVersion = 1 },
 		savedSearches = { type = "table", default = {}, lastModifiedVersion = 1 },
-		helpPlatesShown = { type = "table", default = { auction = nil }, lastModifiedVersion = 1 },
 	},
 }
 local tooltipDefaults = {

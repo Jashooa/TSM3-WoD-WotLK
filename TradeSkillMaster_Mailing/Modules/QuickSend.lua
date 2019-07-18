@@ -128,53 +128,6 @@ function QuickSend:CreateTab()
 				private.frame.btn:GetFontString():SetWidth(private.frame.btn:GetWidth())
 				private.frame.btn:GetFontString():SetHeight(private.frame.btn:GetHeight())
 				private:UpdateSendButton()
-
-				if not self.helpBtn then
-					local TOTAL_WIDTH = private.frame:GetParent():GetWidth()
-					local helpPlateInfo = {
-						FramePos = {x = 0, y = 70},
-						FrameSize = {width = TOTAL_WIDTH, height = private.frame:GetHeight()},
-						{
-							ButtonPos = {x = 100, y = -20},
-							HighLightBox = {x = 70, y = -35, width = TOTAL_WIDTH-70, height = 30},
-							ToolTipDir = "DOWN",
-							ToolTipText = L["These buttons change what is shown in the mailbox frame. You can view your inbox, automatically mail items in groups, quickly send items to other characters, and more in the various tabs."],
-						},
-						{
-							ButtonPos = {x = 340, y = -120},
-							HighLightBox = {x = 0, y = -130, width = TOTAL_WIDTH, height = 30},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["Specify the item to be mailed here."],
-						},
-						{
-							ButtonPos = {x = 340, y = -150},
-							HighLightBox = {x = 0, y = -160, width = TOTAL_WIDTH, height = 30},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["Specify the target player and the maximum quantity to send."],
-						},
-						{
-							ButtonPos = {x = 300, y = -180},
-							HighLightBox = {x = 0, y = -190, width = TOTAL_WIDTH, height = 30},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["Optionally specify a per-item COD amount."],
-						},
-						{
-							ButtonPos = {x = 300, y = -210},
-							HighLightBox = {x = 0, y = -220, width = TOTAL_WIDTH, height = 40},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["Lastly, click this button to send the mail."],
-						},
-					}
-
-					self.helpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
-					self.helpBtn:SetPoint("TOPLEFT", 50, 100)
-					self.helpBtn:SetScript("OnClick", function() TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, true) end)
-					self.helpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false) end end)
-					if not TSM.db.global.helpPlatesShown.quickSend then
-						TSM.db.global.helpPlatesShown.quickSend = true
-						TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false)
-					end
-				end
 			end,
 			itemBox = {
 				OnEditFocusGained = "ClearFocus",

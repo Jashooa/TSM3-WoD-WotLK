@@ -50,47 +50,6 @@ function Groups:CreateTab()
 		handlers = {
 			OnShow = function(self)
 				private.frame = self
-
-				if not self.helpBtn then
-					local TOTAL_WIDTH = private.frame:GetParent():GetWidth()
-					local helpPlateInfo = {
-						FramePos = {x = 0, y = 70},
-						FrameSize = {width = TOTAL_WIDTH, height = private.frame:GetHeight()},
-						{
-							ButtonPos = {x = 100, y = -20},
-							HighLightBox = {x = 70, y = -35, width = TOTAL_WIDTH-70, height = 30},
-							ToolTipDir = "DOWN",
-							ToolTipText = L["These buttons change what is shown in the merchant frame. You can view what the merchant is selling, buyback any items you have sold, automatically buy and sell items in groups, and quickly sell items."],
-						},
-						{
-							ButtonPos = {x = 200, y = -200},
-							HighLightBox = {x = 0, y = -65, width = TOTAL_WIDTH, height = 325},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["Here you can select groups with TSM_Vendoring operations to be automatically bought or sold."],
-						},
-						{
-							ButtonPos = {x = 60, y = -380},
-							HighLightBox = {x = 0, y = -390, width = 185, height = 35},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["Click this button to automatically buy for groups which you have selected."],
-						},
-						{
-							ButtonPos = {x = 270, y = -380},
-							HighLightBox = {x = 190, y = -390, width = 185, height = 35},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["Click this button to automatically sell for groups which you have selected."],
-						},
-					}
-
-					self.helpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
-					self.helpBtn:SetPoint("TOPLEFT", 50, 100)
-					self.helpBtn:SetScript("OnClick", function() TSM.MerchantTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, true) end)
-					self.helpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TSM.MerchantTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false) end end)
-					if not TSM.db.global.helpPlatesShown.groups then
-						TSM.db.global.helpPlatesShown.groups = true
-						TSM.MerchantTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false)
-					end
-				end
 			end,
 			sellButton = {
 				OnClick = function(self)

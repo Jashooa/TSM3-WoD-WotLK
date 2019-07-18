@@ -31,7 +31,6 @@ local settingsInfo = {
 		timeFormat = { type = "string", default = "ago", lastModifiedVersion = 1},
 		history = { type = "table", default = {}, lastModifiedVersion = 1},
 		ignore = { type = "table", default = {}, lastModifiedVersion = 1},
-		helpPlatesShown = { type = "table", default = { destroyingFrame = nil }, lastModifiedVersion = 1},
 	},
 }
 
@@ -39,7 +38,7 @@ local settingsInfo = {
 function TSM:OnInitialize()
 	-- load settings
 	TSM.db = TSMAPI.Settings:Init("TradeSkillMaster_DestroyingDB", settingsInfo)
-	
+
 	-- create shortcuts to all the modules
 	for moduleName, module in pairs(TSM.modules) do
 		TSM[moduleName] = module

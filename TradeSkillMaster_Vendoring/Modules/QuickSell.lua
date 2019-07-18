@@ -110,42 +110,6 @@ function QuickSell:CreateTab(parent)
 				private.frame.hideGroupedChk:SetValue(TSM.db.global.qsHideGrouped)
 				private.frame.hideSoulboundChk:SetValue(TSM.db.global.qsHideSoulbound)
 				private:UpdateQuicksellST()
-
-				if not self.helpBtn then
-					local TOTAL_WIDTH = private.frame:GetParent():GetWidth()
-					local helpPlateInfo = {
-						FramePos = {x = 0, y = 70},
-						FrameSize = {width = TOTAL_WIDTH, height = private.frame:GetHeight()},
-						{
-							ButtonPos = {x = 100, y = -20},
-							HighLightBox = {x = 70, y = -35, width = TOTAL_WIDTH-70, height = 30},
-							ToolTipDir = "DOWN",
-							ToolTipText = L["These buttons change what is shown in the merchant frame. You can view what the merchant is selling, buyback any items you have sold, automatically buy and sell items in groups, and quickly sell items."],
-						},
-						{
-							ButtonPos = {x = 200, y = -200},
-							HighLightBox = {x = 0, y = -65, width = TOTAL_WIDTH, height = 305},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["This is where the items in your inventory are listed. Items that appear here have evaluated to be worth less than your thresholds determined in the options."],
-						},
-						{
-							ButtonPos = {x = 300, y = -360},
-							HighLightBox = {x = 0, y = -370, width = TOTAL_WIDTH, height = 55},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["The 'Sell All' button will sell all items listed above. The 'Trash' button will sell grey items.  The 'BOEs' button will sell bind-on-equip items listed above.\n\nMake sure you review the list before selling the first time."],
-						}
-					}
-
-					self.helpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
-					self.helpBtn:SetPoint("TOPLEFT", 50, 100)
-					self.helpBtn:SetScript("OnClick", function() TSM.MerchantTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, true) end)
-					self.helpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TSM.MerchantTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false) end end)
-					if not TSM.db.global.helpPlatesShown.quickSell then
-						TSM.db.global.helpPlatesShown.quickSell = true
-						TSM.MerchantTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false)
-					end
-				end
-
 			end,
 			hideGroupedChk = {
 				OnValueChanged = function(self, value)

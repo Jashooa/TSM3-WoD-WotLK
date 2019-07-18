@@ -46,35 +46,6 @@ function Buyback:CreateTab()
 			OnShow = function(self)
 				private.frame = self
 				private:UpdateBuybackST()
-
-				if not self.helpBtn then
-					local TOTAL_WIDTH = private.frame:GetParent():GetWidth()
-					local helpPlateInfo = {
-						FramePos = {x = 0, y = 70},
-						FrameSize = {width = TOTAL_WIDTH, height = private.frame:GetHeight()},
-						{
-							ButtonPos = {x = 100, y = -20},
-							HighLightBox = {x = 70, y = -35, width = TOTAL_WIDTH-70, height = 30},
-							ToolTipDir = "DOWN",
-							ToolTipText = L["These buttons change what is shown in the merchant frame. You can view what the merchant is selling, buyback any items you have sold, automatically buy and sell items in groups, and quickly sell items."],
-						},
-						{
-							ButtonPos = {x = 200, y = -200},
-							HighLightBox = {x = 0, y = -65, width = TOTAL_WIDTH, height = 350},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["This is where you can buyback items from the merchant.  Right click on an item to buy it back."],
-						},
-					}
-
-					self.helpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
-					self.helpBtn:SetPoint("TOPLEFT", 50, 100)
-					self.helpBtn:SetScript("OnClick", function() TSM.MerchantTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, true) end)
-					self.helpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TSM.MerchantTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false) end end)
-					if not TSM.db.global.helpPlatesShown.buyback then
-						TSM.db.global.helpPlatesShown.buyback = true
-						TSM.MerchantTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false)
-					end
-				end
 			end,
 			buybackST = {
 				OnClick = function(_, data, self, button)

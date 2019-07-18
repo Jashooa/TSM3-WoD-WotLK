@@ -203,88 +203,6 @@ function Util:createTab(parent)
 
 	private.frame = TSMAPI.GUI:BuildFrame(frameInfo)
 
-	local helpPlateInfo = {
-		FramePos = { x = -5, y = 100 },
-		FrameSize = { width = 275, height = 490 },
-		{
-			ButtonPos = { x = 115, y = -66 },
-			HighLightBox = { x = 0, y = -75, width = 275, height = 27 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["These will toggle between the module specific tabs."],
-		},
-		{
-			ButtonPos = { x = 115, y = -196 },
-			HighLightBox = { x = 0, y = -103, width = 275, height = 243 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["Lists the groups with auctioning operations. Left click to select/deselect the group, Right click to expand/collapse the group."],
-		},
-		{
-			ButtonPos = { x = 52.5, y = -335 },
-			HighLightBox = { x = 0, y = -347, width = 136, height = 23 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["This button will select all groups."],
-		},
-		{
-			ButtonPos = { x = 182.5, y = -335 },
-			HighLightBox = { x = 138, y = -347, width = 136, height = 23 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["This button will de-select all groups."],
-		},
-		{
-			ButtonPos = { x = 52.5, y = -364 },
-			HighLightBox = { x = 0, y = -371, width = 136, height = 30 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["This button will move items in the selected groups up to your post cap (sum of post caps if you have multiple operations) from the bank to your bags."],
-		},
-		{
-			ButtonPos = { x = 182.5, y = -364 },
-			HighLightBox = { x = 138, y = -371, width = 136, height = 30 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["This button will move items in the selected groups from the bank to your bags. It will take into account the number you already have on the auction house (across all players) or pending in your mailbox (current player only) and only move what the shortfall is."],
-		},
-		{
-			ButtonPos = { x = 52.5, y = -394 },
-			HighLightBox = { x = 0, y = -403, width = 136, height = 30 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["This button will move all items in the selected groups from your bags to the bank."],
-		},
-		{
-			ButtonPos = { x = 182.5, y = -394 },
-			HighLightBox = { x = 138, y = -403, width = 136, height = 30 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["This button will move all items in the selected groups from the bank to your bags."],
-		},
-		{
-			ButtonPos = { x = 52.5, y = -428 },
-			HighLightBox = { x = 0, y = -437, width = 136, height = 30 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["This button will move all items in the selected groups that have exceeded the max expires setting from your bags to the bank."],
-		},
-		{
-			ButtonPos = { x = 182.5, y = -428 },
-			HighLightBox = { x = 138, y = -437, width = 136, height = 30 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["This button will move all items in the selected groups that have exceeded the max expires setting from the bank to your bags."],
-		},
-		{
-			ButtonPos = { x = 52.5, y = -462 },
-			HighLightBox = { x = 0, y = -470, width = 136, height = 32 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["This button will move all items NOT in the selected groups from your bags to the bank."],
-		},
-		{
-			ButtonPos = { x = 182.5, y = -462 },
-			HighLightBox = { x = 138, y = -470, width = 136, height = 32 },
-			ToolTipDir = "RIGHT",
-			ToolTipText = L["This button will move all items NOT in the selected groups from the bank to your bags."],
-		},
-	}
-
-	local mainHelpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
-	mainHelpBtn:SetPoint("TOPRIGHT", private.frame, 45, 70)
-	mainHelpBtn:SetScript("OnClick", function() Util:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, true) end)
-	mainHelpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then Util:ToggleHelpPlate(private.frame, helpPlateInfo, mainHelpBtn, false) end end)
-
 	return private.frame
 end
 
@@ -458,17 +376,5 @@ function Util:getTotalItems(src, includeSoulbound)
 			end
 		end
 		return results
-	end
-end
-
-function Util:ToggleHelpPlate(frame, info, btn, isUser)
-	if not HelpPlate_IsShowing(info) then
-		HelpPlate:SetParent(frame)
-		HelpPlate:SetFrameStrata("DIALOG")
-		HelpPlate_Show(info, frame, btn, isUser)
-	else
-		HelpPlate:SetParent(UIParent)
-		HelpPlate:SetFrameStrata("DIALOG")
-		HelpPlate_Hide(isUser)
 	end
 end

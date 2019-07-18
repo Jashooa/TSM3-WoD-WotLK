@@ -284,57 +284,6 @@ function Gather:CreateMainFrame()
 	private.gatheringFrame.gatheroptions.disableCheckBox:SetValue(TSM.db.factionrealm.disableCheckBox)
 	private.gatheringFrame.gatheroptions.ignoreDECheckBox:SetValue(TSM.db.factionrealm.ignoreDECheckBox)
 	private.gatheringFrame.gatheroptions.ignoreIntermediate:SetValue(TSM.db.factionrealm.ignoreIntermediate)
-
-	local helpPlateInfo = {
-		FramePos = { x = 0, y = 0 },
-		FrameSize = { width = private.gatheringFrame:GetWidth(), height = private.gatheringFrame:GetHeight() },
-		{
-			ButtonPos = { x = 50, y = -23 },
-			HighLightBox = { x = 10, y = -30, width = 120, height = 30 },
-			ToolTipDir = "UP",
-			ToolTipText = L["This toggles the display of the options frame."]
-		},
-		{
-			ButtonPos = { x = 100, y = -180 },
-			HighLightBox = { x = 0, y = -70, width = private.gatheringFrame:GetWidth() / 2, height = private.gatheringFrame:GetHeight() - 140 },
-			ToolTipDir = "UP",
-			ToolTipText = L["This displays the available sources for each item that is required, click a source to select or deselect that source. On opening the window, materials needed to be gathered from the crafter or have a single source are auto-selected"]
-		},
-		{
-			ButtonPos = { x = 350, y = -180 },
-			HighLightBox = { x = 252, y = -70, width = (private.gatheringFrame:GetWidth() / 2) - 3, height = private.gatheringFrame:GetHeight() - 140 },
-			ToolTipDir = "UP",
-			ToolTipText = L["This displays the tasks that you need to perform to gather the required materials from the selected sources."]
-		},
-		{
-			ButtonPos = { x = 100, y = -331 },
-			HighLightBox = { x = 0, y = -338, width = private.gatheringFrame:GetWidth() / 2, height = 30 },
-			ToolTipDir = "UP",
-			ToolTipText = L["Clicking this button will gather the required materials when you are at a valid source, the text of the button will change according to source."]
-		},
-		{
-			ButtonPos = { x = 350, y = -331 },
-			HighLightBox = { x = 252, y = -338, width = (private.gatheringFrame:GetWidth() / 2) - 3, height = 30 },
-			ToolTipDir = "UP",
-			ToolTipText = L["Click this button to stop gathering and close the window."]
-		},
-		{
-			ButtonPos = { x = 463, y = -365 },
-			HighLightBox = { x = 470, y = -375, width = 30, height = 25 },
-			ToolTipDir = "UP",
-			ToolTipText = L["Hold the left mouse button down and drag this handle to resize the window."]
-		},
-	}
-
-	local mainHelpBtn = CreateFrame("Button", nil, private.gatheringFrame, "UIPanelButtonTemplate")
-	mainHelpBtn:SetPoint("CENTER", private.gatheringFrame, "TOPRIGHT", 0, 0)
-	mainHelpBtn:SetScript("OnClick", function() TradeSkill:ToggleHelpPlate(private.gatheringFrame, helpPlateInfo, mainHelpBtn, true) end)
-	mainHelpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TradeSkill:ToggleHelpPlate(private.gatheringFrame, helpPlateInfo, mainHelpBtn, false) end end)
-
-	if not TSM.db.global.helpPlatesShown.gatheringFrame then
-		TSM.db.global.helpPlatesShown.gatheringFrame = true
-		TradeSkill:ToggleHelpPlate(private.gatheringFrame, helpPlateInfo, mainHelpBtn, false)
-	end
 end
 
 function Gather:CreateOptionsFrame()

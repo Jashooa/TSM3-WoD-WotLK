@@ -119,42 +119,7 @@ function Inbox:CreateTab()
 			OnShow = function(self)
 				private.frame = self
 				self.reloadBtn:SetFrameStrata("HIGH")
-				self.reloadBtn:Hide()
-
-				if not self.helpBtn then
-					local TOTAL_WIDTH = private.frame:GetParent():GetWidth()
-					local helpPlateInfo = {
-						FramePos = {x = 0, y = 70},
-						FrameSize = {width = TOTAL_WIDTH, height = private.frame:GetHeight()},
-						{
-							ButtonPos = {x = 100, y = -20},
-							HighLightBox = {x = 70, y = -35, width = TOTAL_WIDTH-70, height = 30},
-							ToolTipDir = "DOWN",
-							ToolTipText = L["These buttons change what is shown in the mailbox frame. You can view your inbox, automatically mail items in groups, quickly send items to other characters, and more in the various tabs."],
-						},
-						{
-							ButtonPos = {x = 200, y = -200},
-							HighLightBox = {x = 0, y = -65, width = TOTAL_WIDTH, height = 305},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["This is where the items in your inbox are listed in an information and easy to read format."],
-						},
-						{
-							ButtonPos = {x = 300, y = -360},
-							HighLightBox = {x = 0, y = -370, width = TOTAL_WIDTH, height = 55},
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["The 'Open All Mail' button will open all mail in your inbox (including beyond the 50-mail limit). The AH mail buttons below that will open specific types of mail from your inbox."],
-						},
-					}
-
-					self.helpBtn = CreateFrame("Button", nil, private.frame, "UIPanelButtonTemplate")
-					self.helpBtn:SetPoint("TOPLEFT", 50, 100)
-					self.helpBtn:SetScript("OnClick", function() TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, true) end)
-					self.helpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false) end end)
-					if not TSM.db.global.helpPlatesShown.inbox then
-						TSM.db.global.helpPlatesShown.inbox = true
-						TSM.MailTab:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false)
-					end
-				end
+                self.reloadBtn:Hide()
 
 				private:InboxUpdate()
 			end,

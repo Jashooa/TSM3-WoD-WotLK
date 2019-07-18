@@ -358,45 +358,6 @@ function Professions:GetFrameInfo()
 			OnShow = function(self)
 				private.frame = self:GetParent()
 				if not TradeSkill:GetVisibilityInfo().frame then return end
-				if not self.helpBtn then
-					local helpPlateInfo = {
-						FramePos = { x = 0, y = 0 },
-						FrameSize = { width = private.frame:GetWidth(), height = private.frame:GetHeight() },
-						{
-							ButtonPos = { x = 80, y = 15 },
-							HighLightBox = { x = 20, y = 0, width = 80, height = 25 },
-							ToolTipDir = "UP",
-							ToolTipText = L["This button will switch to the default profession UI. You can switch back by clicking the 'TSM' button at the top of the default profession UI."]
-						},
-						{
-							ButtonPos = { x = 170, y = -18 },
-							HighLightBox = { x = 0, y = -25, width = private.frame:GetWidth(), height = 30 },
-							ToolTipDir = "UP",
-							ToolTipText = L["You can change the current tab of the profession frame, start gathering materials for your queue, and show the queue using these buttons."]
-						},
-						{
-							ButtonPos = { x = 50, y = -48 },
-							HighLightBox = { x = 0, y = -55, width = private.frame:GetWidth(), height = 35 },
-							ToolTipDir = "UP",
-							ToolTipText = L["You can use this dropdown to switch between the current character's professions."]
-						},
-						{
-							ButtonPos = { x = 300, y = -250 },
-							HighLightBox = { x = 0, y = -90, width = private.frame:GetWidth(), height = 410 },
-							ToolTipDir = "RIGHT",
-							ToolTipText = L["This area of the profession tab works similarly to the default profession UI, but with some added features. These include the ability to easily add crafts to your queue, listing profit next to crafts, and displaying inventory information."]
-						},
-					}
-
-					self.helpBtn = CreateFrame("Button", nil, private.frame.professionsTab, "UIPanelButtonTemplate")
-					self.helpBtn:SetPoint("CENTER", private.frame, "TOPLEFT", 0, 0)
-					self.helpBtn:SetScript("OnClick", function() TradeSkill:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, true) end)
-					self.helpBtn:SetScript("OnHide", function() if HelpPlate_IsShowing(helpPlateInfo) then TradeSkill:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false) end end)
-					if not TSM.db.global.helpPlatesShown.profession then
-						TSM.db.global.helpPlatesShown.profession = true
-						TradeSkill:ToggleHelpPlate(private.frame, helpPlateInfo, self.helpBtn, false)
-					end
-				end
 				private.frame.groupsBtn:UnlockHighlight()
 				private.frame.professionsBtn:LockHighlight()
 				private.frame.groupsTab:Hide()

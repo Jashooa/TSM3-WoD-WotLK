@@ -400,18 +400,6 @@ function private:Create()
 	TSMAPI.Design:SetFrameColor(frame.professionsTab.craftInfoFrame)
 end
 
-function TradeSkill:ToggleHelpPlate(frame, info, btn, isUser)
-	if not HelpPlate_IsShowing(info) then
-		HelpPlate:SetParent(frame)
-		HelpPlate:SetFrameStrata("DIALOG")
-		HelpPlate_Show(info, frame, btn, isUser)
-	else
-		HelpPlate:SetParent(UIParent)
-		HelpPlate:SetFrameStrata("DIALOG")
-		HelpPlate_Hide(isUser)
-	end
-end
-
 function private:CreateSwitchButton()
 	if private.switchBtn then return end
 	local frameInfo = {

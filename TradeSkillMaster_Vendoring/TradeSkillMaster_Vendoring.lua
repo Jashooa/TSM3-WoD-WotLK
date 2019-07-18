@@ -28,7 +28,6 @@ local settingsInfo = {
 		qsDestroyValue = { type = "string", default = "destroy", lastModifiedVersion = 1 },
 		qsMaxDestroyValue = { type = "string", default = "100g", lastModifiedVersion = 1 },
 		ignore = { type = "table", default = {}, lastModifiedVersion = 1 },
-		helpPlatesShown = { type = "table", default = { buy = nil, buyback = nil, groups = nil, quickSell = nil }, lastModifiedVersion = 1 },
 	},
 }
 local operationDefaults = {

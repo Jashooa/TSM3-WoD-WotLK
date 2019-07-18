@@ -37,7 +37,6 @@ local settingsInfo = {
 		scanDataEU = { type = "string", default = "", lastModifiedVersion = 2},
 		lastUpdateUS = { type = "number", default = 0, lastModifiedVersion = 2},
 		lastUpdateEU = { type = "number", default = 0, lastModifiedVersion = 2},
-		helpPlatesShown = { type = "table", default = { auction = nil }, lastModifiedVersion = 1},
 		showAHTab = { type = "boolean", default = true, lastModifiedVersion = 1},
 	},
 }
