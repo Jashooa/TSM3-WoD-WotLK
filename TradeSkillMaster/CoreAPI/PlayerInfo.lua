@@ -54,7 +54,7 @@ function TSMAPI.Player:IsPlayer(target, includeAlts, includeOtherFaction, includ
 	local faction = strlower(UnitFactionGroup("player"))
 	local realm = strlower(GetRealmName())
 	local factionrealm = faction.." - "..realm
-	
+
 	if target == player then
 		return true
 	elseif strfind(target, " %- ") and target == (player.." - "..realm) then
@@ -63,7 +63,7 @@ function TSMAPI.Player:IsPlayer(target, includeAlts, includeOtherFaction, includ
 	if not strfind(target, " %- ") then
 		target = target.." - "..realm
 	end
-	if includeAlts then
+	--[[if includeAlts then
 		local isConnectedRealm = {[realm]=true}
 		for _, realmName in ipairs(TSMAPI:GetConnectedRealms()) do
 			isConnectedRealm[strlower(realmName)] = true
@@ -82,5 +82,5 @@ function TSMAPI.Player:IsPlayer(target, includeAlts, includeOtherFaction, includ
 				end
 			end
 		end
-	end
+	end]]--
 end
