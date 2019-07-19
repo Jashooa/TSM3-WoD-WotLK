@@ -21,11 +21,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_AuctionDB") -- lo
 function Config:Load(container)
 	local lastScanInfo
 	if TSM.db.realm.lastCompleteScan > 0 then
-		if TSM.db.realm.hasAppData then
-			lastScanInfo = format(L["Last updated from the TSM Application %s ago."], SecondsToTime(time() - TSM.db.realm.lastCompleteScan))
-		else
-			lastScanInfo = format(L["Last updated from in-game scan %s ago."], SecondsToTime(time() - TSM.db.realm.lastCompleteScan))
-		end
+		lastScanInfo = format(L["Last updated from in-game scan %s ago."], SecondsToTime(time() - TSM.db.realm.lastCompleteScan))
 	else
 		lastScanInfo = L["No scans found."]
 	end

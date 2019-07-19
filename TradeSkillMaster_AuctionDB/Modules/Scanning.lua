@@ -203,7 +203,7 @@ function private.GetAllScanThread(self)
 			return
 		elseif event == "GETALL_BAD_DATA" then
 			-- got bad data from the server
-			TSM:Print(L["GetAll scan did not run successfully due to issues on Blizzard's end. Using the TSM desktop application for your scans is recommended."])
+			TSM:Print(L["GetAll scan did not run successfully due to issues on Blizzard's end."])
 			TSM.GUI:UpdateStatus(L["Done Scanning"], 100)
 			return
 		else
@@ -251,22 +251,15 @@ function private:ProcessScanDataThread(self, scanData, itemList)
 	TSM.updatedRealmData = true
 	for itemString, data in pairs(scanData) do
 		itemString = TSMAPI.Item:ToBaseItemString(itemString)
-		if TSM.db.realm.hasAppData and TSM.realmData[itemString] then
-			-- if we have data from the app, just update the minBuyout/numAuctions/lastScan
-			TSM.realmData[itemString].minBuyout = data.minBuyout
-			TSM.realmData[itemString].numAuctions = data.numAuctions
-			TSM.realmData[itemString].lastScan = scanTime
-		else
-			TSM.realmData[itemString] = TSM.realmData[itemString] or {}
-			if #data.buyouts > 0 then
-				TSM.realmData[itemString].marketValue = private:CalculateMarketValue(data.buyouts)
-			else
-				TSM.realmData[itemString].marketValue = TSM.realmData[itemString].marketValue or 0
-			end
-			TSM.realmData[itemString].minBuyout = data.minBuyout
-			TSM.realmData[itemString].numAuctions = data.numAuctions
-			TSM.realmData[itemString].lastScan = scanTime
-		end
+        TSM.realmData[itemString] = TSM.realmData[itemString] or {}
+        if #data.buyouts > 0 then
+            TSM.realmData[itemString].marketValue = private:CalculateMarketValue(data.buyouts)
+        else
+            TSM.realmData[itemString].marketValue = TSM.realmData[itemString].marketValue or 0
+        end
+        TSM.realmData[itemString].minBuyout = data.minBuyout
+        TSM.realmData[itemString].numAuctions = data.numAuctions
+        TSM.realmData[itemString].lastScan = scanTime
 		self:Yield()
 	end
 end

@@ -390,25 +390,6 @@ private.SettingsDBMethods = {
 	DeleteProfile = function(self, profileName)
 		self:DeleteScope("profile", profileName)
 	end,
-
-	GetConnectedRealmIterator = function(self, scope)
-		TSMAPI:Assert(scope == "factionrealm" or scope == "realm")
-		local faction = UnitFactionGroup("player")
-		local realms = TSMAPI:GetConnectedRealms()
-		local index = 0
-
-		return function()
-			while true do
-				local realm = index == 0 and SCOPE_KEYS.realm or realms[index]
-				if not realm then return end
-				index = index + 1
-				local scopeKey = (scope == "factionrealm") and (faction.." - "..realm) or realm
-				if tContains(private.context[self].db._scopeKeys[scope], scopeKey) then
-					return scopeKey, private.SettingsDBScopeProxy(self, scope, scopeKey)
-				end
-			end
-		end
-	end,
 }
 
 

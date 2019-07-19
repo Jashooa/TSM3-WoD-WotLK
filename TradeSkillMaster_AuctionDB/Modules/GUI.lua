@@ -58,22 +58,6 @@ function private:Create(parent)
 		points = "ALL",
 		children = {
 			{
-				type = "Text",
-				key = "appAd",
-				text = TSMAPI.Design:GetInlineColor("link")..L["Scanning the auction house in game is no longer necessary!"].."|r",
-				textHeight = 20,
-				justify = {"CENTER", "MIDDLE"},
-				size = {0, 20},
-				points = {{"TOP", 45, -5}},
-			},
-			{
-				type = "Text",
-				text = format(L["Download the FREE TSM desktop application which will automatically update your TSM_AuctionDB prices using Blizzard's online APIs (and does MUCH more). Visit %s for more info and never scan the AH again! This is the best way to update your AuctionDB prices."], TSMAPI.Design:GetInlineColor("link").."http://tradeskillmaster.com/app/overview".."|r"),
-				justify = {"LEFT", "TOP"},
-				size = {0, 55},
-				points = {{"TOPLEFT", 90, -30}, {"TOPRIGHT", -5, -30}},
-			},
-			{
 				type = "Frame",
 				key = "content",
 				points = {{"TOPLEFT", parent.content}, {"BOTTOMRIGHT", parent.content}},
@@ -193,14 +177,6 @@ function private:Create(parent)
 	private.frame = TSMAPI.GUI:BuildFrame(frameInfo)
 	TSMAPI.Design:SetFrameBackdropColor(private.frame.content)
 	private.frame.statusBar = private.frame.content.statusBar
-
-	-- create animation for app ad
-	local ag = private.frame.appAd:CreateAnimationGroup()
-	local a1 = ag:CreateAnimation("Alpha")
-	a1:SetChange(-.4)
-	a1:SetDuration(.5)
-	ag:SetLooping("BOUNCE")
-	ag:Play()
 end
 
 

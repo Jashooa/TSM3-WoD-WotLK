@@ -29,7 +29,7 @@ end
 
 function private:StartFilterSearch()
 	local filter = private.frame.filter.filterInputBox:GetText()
-	
+
 	local minLevel = private.frame.filter.levelMinBox:GetNumber()
 	local maxLevel = private.frame.filter.levelMaxBox:GetNumber()
 	if maxLevel > 0 then
@@ -37,7 +37,7 @@ function private:StartFilterSearch()
 	elseif minLevel > 0 then
 		filter = format("%s/%d", filter, minLevel)
 	end
-	
+
 	local minItemLevel = private.frame.filter.itemLevelMinBox:GetNumber()
 	local maxItemLevel = private.frame.filter.itemLevelMaxBox:GetNumber()
 	if maxItemLevel > 0 then
@@ -45,7 +45,7 @@ function private:StartFilterSearch()
 	elseif minItemLevel > 0 then
 		filter = format("%s/i%d", filter, minItemLevel)
 	end
-	
+
 	local class = private.frame.filter.classDropdown:GetValue()
 	if class then
 		local classes = {GetAuctionItemClasses()}
@@ -56,25 +56,25 @@ function private:StartFilterSearch()
 			filter = format("%s/%s", filter, subClasses[subClass])
 		end
 	end
-	
+
 	local rarity = private.frame.filter.rarityDropdown:GetValue()
 	if rarity then
 		filter = format("%s/%s", filter,  _G["ITEM_QUALITY"..rarity.."_DESC"])
 	end
-	
+
 	if private.frame.filter.usableCheckBox:GetValue() then
 		filter = format("%s/usable", filter)
 	end
-	
+
 	if private.frame.filter.exactCheckBox:GetValue() then
 		filter = format("%s/exact", filter)
 	end
-	
+
 	local maxQty = private.frame.filter.maxQtyBox:GetNumber()
 	if maxQty > 0 then
 		filter = format("%s/x%d", filter, maxQty)
 	end
-	
+
 	local searchInfo = {searchMode="normal", extraInfo={searchType="filter"}, filter=filter}
 	TSM.AuctionTab:StartSearch(searchInfo)
 end
@@ -84,21 +84,21 @@ end
 function private.StartSearchThread(self, mode)
 	self:SetThreadName("SHOPPING_START_OTHER_SEARCH")
 	TSMAPI:Assert(mode == "vendor" or mode == "disenchant")
-	
+
 	local lastScanTime = TSMAPI:ModuleAPI("AuctionDB", "lastCompleteScanTime")
 	local lastScanData = TSMAPI:ModuleAPI("AuctionDB", "lastCompleteScan")
 	if not lastScanData or lastScanTime < time() - 60 * 60 * 12 or not next(lastScanData) then
 		TSM:Print(L["No recent AuctionDB scan data found."])
 		return
 	end
-	
+
 	local items = {}
 	for itemString in pairs(lastScanData) do
 		tinsert(items, TSMAPI.Item:ToItemString(itemString))
 		self:Yield()
 	end
 	self:WaitForItemInfo(items)
-	
+
 	local itemList = {}
 	local searchBoxText = nil
 	if mode == "vendor" then
@@ -124,12 +124,12 @@ function private.StartSearchThread(self, mode)
 		end
 		searchBoxText = "~"..L["disenchant search"].."~"
 	end
-	
+
 	if #itemList == 0 then
 		TSM:Print(L["Nothing to search for!"])
 		return
 	end
-	
+
 	local searchInfo = {searchMode="normal", item=itemList, searchBoxText=searchBoxText, extraInfo={searchType=mode}}
 	TSM.AuctionTab:StartSearch(searchInfo)
 	-- need a sleep here since it will take a few frames for the scan to actually start and until then this thread shouldn't exit
@@ -162,14 +162,6 @@ function private:StartSniperSearch()
 		callback = private.StartSniperSearch,
 	}
 	TSM.AuctionTab:StartSearch({searchMode="normal", extraInfo={searchType="sniper", continue=continueInfo}, searchBoxText="~"..L["sniper"].."~"})
-end
-
-function private:StartGreatDealsSearch()
-	TSM.AuctionTab:StartSearch({searchMode="normal", extraInfo={searchType="deals"}, filter=private.appData.greatDeals, searchBoxText="~"..L["great deals"].."~"})
-end
-
-function private:StartItemNotificationsSearch()
-	TSM.AuctionTab:StartSearch({searchMode="normal", extraInfo={searchType="deals"}, filter=private.appData.itemNotifications, searchBoxText="~"..L["item notifications"].."~"})
 end
 
 
@@ -442,49 +434,6 @@ function AuctionTabOther:GetFrameInfo()
 						type = "HLine",
 						offset = -230,
 					},
-					{
-						type = "Frame",
-						key = "appData",
-						points = {{"TOPLEFT", 0, -230}, {"BOTTOMRIGHT"}},
-						children = {
-							{
-								type = "Text",
-								text = L["Desktop App Searches"],
-								textHeight = 18,
-								justify = {"CENTER", "MIDDLE"},
-								size = {0, 20},
-								points = {{"TOPLEFT", 0, -5}, {"TOPRIGHT", 0, -5}},
-							},
-							{
-								type = "HLine",
-								offset = -30,
-							},
-							{
-								type = "Button",
-								key = "greatDealsBtn",
-								text = L["Great Deals"],
-								tooltip = "This searches the AH for all items found on the TSM Great Deals page (http://tradeskillmaster.com/great-deals).",
-								textHeight = 18,
-								size = {0, 25},
-								points = {{"TOPLEFT", 5, -35}, {"TOPRIGHT", -5, -35}},
-								scripts = {"OnClick"},
-							},
-							{
-								type = "HLine",
-								offset = -65,
-							},
-							{
-								type = "Button",
-								key = "itemNotificationsBtn",
-								text = L["Item Notifications"],
-								tooltip = L["This searches the AH for your current deals as displayed on the TSM website."],
-								textHeight = 18,
-								size = {0, 25},
-								points = {{"TOPLEFT", 5, -70}, {"TOPRIGHT", -5, -70}},
-								scripts = {"OnClick"},
-							},
-						},
-					},
 				},
 			},
 		},
@@ -495,33 +444,6 @@ function AuctionTabOther:GetFrameInfo()
 				private.frame.filter.filterInputBox:SetFocus()
 				for itemID in pairs(TSMAPI:ModuleAPI("AuctionDB", "lastCompleteScan") or {}) do
 					TSMAPI.Item:QueryInfo(TSMAPI.Item:ToItemString(itemID))
-				end
-				local appData = TSMAPI.AppHelper and TSMAPI.AppHelper:FetchData("SHOPPING_SEARCHES")
-				if appData then
-					for _, info in pairs(appData) do
-						local realmName, data = unpack(info)
-						if TSMAPI.AppHelper:IsCurrentRealm(realmName) then
-							private.appData = assert(loadstring(data))()
-							break
-						end
-					end
-				end
-				if private.appData then
-					private.frame.other.appData:Show()
-					if private.appData.greatDeals then
-						-- populate item info cache
-						for _, item in ipairs({(";"):split(private.appData.greatDeals)}) do
-							item = ("/"):split(item)
-							TSMAPI.Item:QueryInfo(item)
-						end
-					else
-						private.frame.other.appData.greatDealsBtn:Disable()
-					end
-					if not private.appData.itemNotifications then
-						private.frame.other.appData.itemNotificationsBtn:Disable()
-					end
-				else
-					private.frame.other.appData:Hide()
 				end
 			end,
 			filter = {
@@ -548,14 +470,6 @@ function AuctionTabOther:GetFrameInfo()
 				},
 				sniperStartBtn = {
 					OnClick = private.StartSniperSearch,
-				},
-				appData = {
-					greatDealsBtn = {
-						OnClick = private.StartGreatDealsSearch,
-					},
-					itemNotificationsBtn = {
-						OnClick = private.StartItemNotificationsSearch,
-					},
 				},
 			},
 		},

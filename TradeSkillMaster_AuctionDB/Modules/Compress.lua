@@ -117,31 +117,3 @@ function Compress:LoadRealmData()
 		TSM.realmData = {}
 	end
 end
-
-function Compress:SaveRegionDataUS()
-	if TSM.updatedRegionDataUS and TSM.regionDataUS then
-		TSM.db.global.scanDataUS = EncodeScanData(TSM.regionDataUS, REGION_SAVE_KEYS)
-	end
-end
-
-function Compress:SaveRegionDataEU()
-	if TSM.updatedRegionDataEU and TSM.regionDataEU then
-		TSM.db.global.scanDataEU = EncodeScanData(TSM.regionDataEU, REGION_SAVE_KEYS)
-	end
-end
-
-function Compress:LoadRegionDataUS()
-	TSM.regionDataUS = DecodeScanData(TSM.db.global.scanDataUS, REGION_SAVE_KEYS)
-	-- if we weren't able to decode, just clear the scan data
-	if type(TSM.regionDataUS) ~= "table" then
-		TSM.regionDataUS = {}
-	end
-end
-
-function Compress:LoadRegionDataEU()
-	TSM.regionDataEU = DecodeScanData(TSM.db.global.scanDataEU, REGION_SAVE_KEYS)
-	-- if we weren't able to decode, just clear the scan data
-	if type(TSM.regionDataEU) ~= "table" then
-		TSM.regionDataEU = {}
-	end
-end

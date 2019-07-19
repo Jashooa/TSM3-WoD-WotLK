@@ -63,24 +63,4 @@ function TSMAPI.Player:IsPlayer(target, includeAlts, includeOtherFaction, includ
 	if not strfind(target, " %- ") then
 		target = target.." - "..realm
 	end
-	--[[if includeAlts then
-		local isConnectedRealm = {[realm]=true}
-		for _, realmName in ipairs(TSMAPI:GetConnectedRealms()) do
-			isConnectedRealm[strlower(realmName)] = true
-		end
-		for factionrealmKey, data in TSM.db:GetConnectedRealmIterator("factionrealm") do
-			local factionKey, realmKey = strmatch(factionrealmKey, "(.+) %- (.+)")
-			factionKey = strlower(factionKey)
-			realmKey = strlower(realmKey)
-			if (includeOtherFaction or factionKey == faction) and isConnectedRealm[realmKey] then
-				for charKey in pairs(data.characters) do
-					if includeOtherAccounts or not data.syncMetadata or not data.syncMetadata.TSM_CHARACTERS or (data.syncMetadata.TSM_CHARACTERS[charKey].owner == TSMAPI.Sync:GetAccountKey()) then
-						if target == (strlower(charKey).." - "..realmKey) then
-							return true
-						end
-					end
-				end
-			end
-		end
-	end]]--
 end

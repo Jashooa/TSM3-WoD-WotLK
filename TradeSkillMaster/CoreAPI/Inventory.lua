@@ -270,18 +270,6 @@ function Inventory:OnEnable()
 	for guild, data in pairs(TSM.db.factionrealm.guildVaults) do
 		private.guildData[guild] = data
 	end
-	--[[for factionrealm, connectedRealmSettings in TSM.db:GetConnectedRealmIterator("factionrealm") do
-		local realmName = strmatch(factionrealm, "[A-Za-z]+ %- (.+)")
-		for player, data in pairs(connectedRealmSettings.inventory) do
-			if realmName and realmName ~= GetRealmName() then
-				player = player.."-"..realmName
-			end
-			private.playerData[player] = data
-		end
-		for guild, data in pairs(connectedRealmSettings.guildVaults) do
-			private.guildData[guild] = data
-		end
-	end]]--
 	-- initialize pendingMailQuantities
 	wipe(private.pendingMailQuantities)
 	for player, pendingMailData in pairs(TSM.db.factionrealm.pendingMail) do

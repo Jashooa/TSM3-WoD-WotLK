@@ -18,7 +18,7 @@ TSM.moduleOperationInfo = {} -- PRIVATE: reference will be removed once loading 
 TSM.exportedForTesting = {} -- PRIVATE: reference will be removed once loading completes - used by test infrastructure code
 local LibRealmInfo = LibStub("LibRealmInfo")
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster") -- loads the localization table
-local private = {cachedConnectedRealms=nil, appInfo=nil}
+--local private = {}
 TSMAPI = {Auction={}, GUI={}, Design={}, Debug={}, Item={}, ItemFilter={}, Conversions={}, Delay={}, Player={}, Inventory={}, Threading={}, Groups={}, Operations={}, Util={}, Settings={}}
 
 TSM.designDefaults = {
@@ -75,7 +75,6 @@ local settingsInfo = {
 		auctionBuyEnabled = { type = "boolean", default = true, lastModifiedVersion = 1 },
 		tsmItemTweetEnabled = { type = "boolean", default = true, lastModifiedVersion = 1 },
 		moveDelay = { type = "number", default = 0, lastModifiedVersion = 1 },
-		appMessageId = { type = "number", default = 0, lastModifiedVersion = 4 },
 	},
 	profile = {
 		design = { type = "table", default = nil, lastModifiedVersion = 1 },
@@ -291,22 +290,7 @@ function TSM:OnInitialize()
 end
 
 function TSM:OnEnable()
-	-- load app info if available
-	if TSMAPI.AppHelper then
-		local appInfo = TSMAPI.AppHelper:FetchData("APP_INFO")
-		if appInfo and #appInfo == 1 and #appInfo[1] == 2 and appInfo[1][1] == "Global" then
-			private.appInfo = assert(loadstring(appInfo[1][2]))()
-			if private.appInfo.message and private.appInfo.message.id > TSM.db.global.appMessageId then
-				TSM.db.global.appMessageId = private.appInfo.message.id
-				StaticPopupDialogs["TSMAppMessagePopup"] = {
-					text = private.appInfo.message.msg,
-					button1 = OKAY,
-					timeout = 0,
-				}
-				TSMAPI.Util:ShowStaticPopupDialog("TSMAppMessagePopup")
-			end
-		end
-	end
+
 end
 
 function TSM:RegisterModule()
@@ -380,54 +364,6 @@ function TSM:RegisterModule()
 	--@end-debug@]===]
 
 	TSMAPI:NewModule(TSM)
-end
-
-function TSM:OnTSMDBShutdown(appDB)
-	if not appDB then return end
-
-	-- store region
-	local region = TSMAPI:GetRegion()
-	appDB.region = region
-
-	local function GetShoppingMaxPrice(itemString, groupPath)
-		local operationName = TSM.db.profile.groups[groupPath].Shopping[1]
-		if not operationName or operationName == "" or TSM.Modules:IsOperationIgnored("Shopping", operationName) then return end
-		local operation = TSM.operations.Shopping[operationName]
-		if not operation or type(operation.maxPrice) ~= "string" then return end
-		local value = TSMAPI:GetCustomPriceValue(operation.maxPrice, itemString)
-		if not value or value <= 0 then return end
-		return value
-	end
-
-	-- save TSM_Shopping max prices in the app DB
-	if TSM.operations.Shopping then
-		appDB.shoppingMaxPrices = {}
-		for profile in TSMAPI:GetTSMProfileIterator() do
-			local profileGroupData = {}
-			for itemString, groupPath in pairs(TSM.db.profile.items) do
-				local itemId = tonumber(strmatch(itemString, "^i:([0-9]+)$"))
-				if itemId and TSM.db.profile.groups[groupPath] and TSM.db.profile.groups[groupPath].Shopping then
-					local maxPrice = GetShoppingMaxPrice(itemString, groupPath)
-					if maxPrice then
-						if not profileGroupData[groupPath] then
-							profileGroupData[groupPath] = {}
-						end
-						tinsert(profileGroupData[groupPath], "["..table.concat({itemId, maxPrice}, ",").."]")
-					end
-				end
-			end
-			if next(profileGroupData) then
-				appDB.shoppingMaxPrices[profile] = {}
-				for groupPath, data in pairs(profileGroupData) do
-					appDB.shoppingMaxPrices[profile][groupPath] = "["..table.concat(data, ",").."]"
-				end
-				appDB.shoppingMaxPrices[profile].updateTime = time()
-			end
-		end
-	end
-
-	-- save analytics
-	TSM.Analytics:Save(appDB)
 end
 
 
@@ -752,14 +688,6 @@ function TSM:ChangeProfile(targetProfile)
 	end
 end
 
-function TSM:GetAppVersion()
-	return private.appInfo and private.appInfo.version or 0
-end
-
-function TSM:GetAppAddonVersions()
-	return private.appInfo and private.appInfo.addonVersions
-end
-
 
 
 -- ============================================================================
@@ -790,26 +718,6 @@ function TSMAPI:GetChatFrame()
 		end
 	end
 	return chatFrame
-end
-
-function TSMAPI:GetConnectedRealms()
-	if private.cachedConnectedRealms then return private.cachedConnectedRealms end
-	local currentRealm = gsub(GetRealmName(), "[ %-]", "")
-	local connectedRealms = GetAutoCompleteRealms()
-
-	if connectedRealms then
-		for i, realm in ipairs(connectedRealms) do
-			if realm == currentRealm then
-				private.cachedConnectedRealms = connectedRealms
-				tremove(private.cachedConnectedRealms, i)
-				return private.cachedConnectedRealms
-			end
-		end
-		TSMAPI:Assert(false, "Could not find connected realm")
-	else
-		private.cachedConnectedRealms = {}
-		return private.cachedConnectedRealms
-	end
 end
 
 function TSMAPI:GetRegion()
