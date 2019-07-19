@@ -58,7 +58,8 @@ function private:StartFilterSearch()
 	end
 
 	local rarity = private.frame.filter.rarityDropdown:GetValue()
-	if rarity then
+    if rarity then
+        rarity = rarity - 1
 		filter = format("%s/%s", filter,  _G["ITEM_QUALITY"..rarity.."_DESC"])
 	end
 
@@ -168,7 +169,7 @@ end
 
 function AuctionTabOther:GetFrameInfo()
 	local rarityList = {}
-	for i = 1, 4 do tinsert(rarityList, _G["ITEM_QUALITY"..i.."_DESC"]) end
+	for i = 0, getn(ITEM_QUALITY_COLORS)-2 do tinsert(rarityList, _G["ITEM_QUALITY"..i.."_DESC"]) end
 	local BFC = TSMAPI.GUI:GetBuildFrameConstants()
 	local frameInfo = {
 		type = "Frame",
@@ -297,7 +298,7 @@ function AuctionTabOther:GetFrameInfo()
 					{
 						type = "Dropdown",
 						key = "rarityDropdown",
-						label = L["Minimum Rarity"],
+						label = "Rarity",
 						list = rarityList,
 						points = {{"TOPLEFT", 5, -182}, {"TOPRIGHT", -5, -182}},
 					},

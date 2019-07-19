@@ -133,7 +133,7 @@ local function GetItemInventoryType(str)
 end
 
 local function GetItemRarity(str)
-	for i=0, 4 do
+	for i=0, getn(ITEM_QUALITY_COLORS)-2 do
 		local text =  _G["ITEM_QUALITY"..i.."_DESC"]
 		if strlower(str) == strlower(text) then
 			return i
@@ -248,7 +248,7 @@ local function GetSearchFilterOptions(searchTerm)
 		minILevel = oldMaxILevel
 	end
 
-	return true, queryString or "", class or 0, subClass or 0, invType or 0, minLevel or 0, maxLevel or 0, minILevel or 0, maxILevel or 0, rarity or 0, usableOnly or 0, exactOnly or nil, evenOnly or nil, maxQuantity or math.huge, maxPrice
+	return true, queryString or "", class or 0, subClass or 0, invType or 0, minLevel or 0, maxLevel or 0, minILevel or 0, maxILevel or 0, rarity or -1, usableOnly or 0, exactOnly or nil, evenOnly or nil, maxQuantity or math.huge, maxPrice
 end
 
 -- gets all the filters for a given search term (possibly semicolon-deliminated list of search terms)
