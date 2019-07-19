@@ -42,10 +42,10 @@ function TSMAPI.Conversions:GetData(targetItem)
 end
 
 function TSMAPI.Conversions:GetTargetItemByName(targetItemName)
-	targetItemName = strlower(targetItemName)
-	for itemString, data in pairs(private.data) do
-		local name = TSMAPI.Item:GetInfo(itemString)
-		if strlower(name) == targetItemName then
+    targetItemName = strlower(targetItemName)
+    for itemString, data in pairs(private.data) do
+        local name = TSMAPI.Item:GetInfo(itemString)
+		if name and strlower(name) == targetItemName then
 			return TSMAPI.Item:ToItemString(itemString)
 		end
 	end
@@ -138,7 +138,7 @@ end
 
 function TSMAPI.Conversions:GetValue(sourceItem, customPrice, method)
 	if not customPrice then return end
-	
+
 	-- calculate disenchant value first
 	if TSMAPI.Item:IsDisenchantable(sourceItem) and (not method or method == "disenchant") then
 		local rarity, ilvl, _, iType = select(3, TSMAPI.Item:GetInfo(sourceItem))
@@ -156,13 +156,13 @@ function TSMAPI.Conversions:GetValue(sourceItem, customPrice, method)
 				end
 			end
 		end
-		
+
 		value = floor(value)
 		if value > 0 then
 			return value
 		end
 	end
-	
+
 	-- calculate other conversion values
 	local value = 0
 	for targetItem, items in pairs(private.data) do
@@ -171,7 +171,7 @@ function TSMAPI.Conversions:GetValue(sourceItem, customPrice, method)
 			value = value + (matValue or 0) * items[sourceItem].rate
 		end
 	end
-	
+
 	value = TSMAPI.Util:Round(value)
 	return value > 0 and value or nil
 end
@@ -200,7 +200,7 @@ end
 function Conversions:GetConvertCost(targetItem, priceSource)
 	local conversions = TSMAPI.Conversions:GetSourceItems(targetItem)
 	if not conversions or not conversions.convert then return end
-	
+
 	local minPrice = nil
 	for itemString, info in pairs(conversions.convert) do
 		if info.method ~= "craft" then -- ignore crafting conversions for convert cost
