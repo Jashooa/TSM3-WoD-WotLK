@@ -12,6 +12,13 @@ local TSM = select(2, ...)
 TSM.enchantingName = GetSpellInfo(7411)
 TSM.VELLUM_ITEM_STRING = "i:38682"
 
+TSM.ARMOR_VELLUM = "i:38682"
+TSM.ARMOR_VELLUM_II = "i:37602"
+TSM.ARMOR_VELLUM_III = "i:43145"
+TSM.WEAPON_VELLUM = "i:39349"
+TSM.WEAPON_VELLUM_II = "i:39350"
+TSM.WEAPON_VELLUM_III = "i:43146"
+
 -- looks up the itemString of the scroll that the enchant makes
 -- index = spellID of the enchant
 -- value = itemString of scroll
