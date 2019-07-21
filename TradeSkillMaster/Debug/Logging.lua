@@ -38,7 +38,7 @@ local Buffer = {
 		end
 		return o
 	end,
-	
+
 	Append = function(self, entry)
 		self[self.cursor] = entry
 		self.cursor = self.cursor + 1
@@ -49,7 +49,7 @@ local Buffer = {
 			self.len = self.len + 1
 		end
 	end,
-	
+
 	Get = function(self, index)
 		local c = self.cursor - self.len + index - 1
 		if c < 1 then
@@ -57,7 +57,7 @@ local Buffer = {
 		end
 		return self[c]
 	end,
-	
+
 	Iterator = function(self)
 		local i = 0
 		return function()
@@ -65,7 +65,7 @@ local Buffer = {
 			if i <= self.len then return self:Get(i) end
 		end
 	end,
-	
+
 	isInitialized = true,
 }
 
@@ -112,7 +112,7 @@ end
 
 function private:CreateViewer()
 	if private.frame then return end
-	
+
 	local BFC = TSMAPI.GUI:GetBuildFrameConstants()
 	local frameInfo = {
 		type = "Frame",
@@ -245,11 +245,12 @@ function private:CreateViewer()
 			},
 		},
 	}
-	private.frame = TSMAPI.GUI:BuildFrame(frameInfo)
+    private.frame = TSMAPI.GUI:BuildFrame(frameInfo)
+    private.frame:EnableMouse(true)
 	private.frame:SetMovable(true)
 	private.frame:SetScale(UIParent:GetScale())
 	TSMAPI.Design:SetFrameBackdropColor(private.frame)
-	
+
 	-- initialize module filters and dropdown list
 	local moduleList = {}
 	for name, buffer in pairs(private.buffers) do
@@ -259,7 +260,7 @@ function private:CreateViewer()
 		end
 	end
 	private.frame.moduleDropdown:SetList(moduleList)
-	
+
 	-- initialize severity filters and dropdown list
 	local SEVERITIES = {"INFO", "WARN", "ERR"}
 	local sevList = {}
@@ -274,22 +275,22 @@ function Debug:ShowLogViewer()
 	if private.frame and private.frame:IsVisible() then return end
 	private:CreateViewer()
 	private.frame:Show()
-	
+
 	-- update module filter dropdown
 	private.frame.moduleDropdown:SetValue({})
 	for name, value in pairs(private.filters.module) do
 		private.frame.moduleDropdown:SetItemValue(name, value)
 	end
-	
+
 	-- update severity filter dropdown
 	private.frame.sevDropdown:SetValue({})
 	for name, value in pairs(private.filters.severity) do
 		private.frame.sevDropdown:SetItemValue(name, value)
 	end
-	
+
 	-- update time filter dropdown
 	private.frame.timeDropdown:SetValue(private.filters.timeIndex)
-	
+
 	if private.threadId then
 		TSMAPI.Threading:Kill(private.threadId)
 	end

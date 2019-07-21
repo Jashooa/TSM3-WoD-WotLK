@@ -22,13 +22,13 @@ function Debug:ShowGUIHelper()
 	local numPoints = widget:GetNumPoints()
 	if numPoints == 0 then return print("This widget has no points!") end
 	if numPoints > 4 then return print("This widget has too many points!") end
-	
+
 	private:CreateHelperFrame()
 	private.frame:Show()
 	private.widget = widget
 	local state = private:UpdateFromWidget()
 	private.defaultState[private.widget] = private.defaultState[private.widget] or state
-	
+
 	if not private.highlightFrame then
 		private.highlightFrame = CreateFrame("Frame")
 		local tex = private.highlightFrame:CreateTexture()
@@ -50,7 +50,7 @@ end
 
 function private:CreateHelperFrame()
 	if private.frame then return end
-	
+
 	local anchors = {
 		TOPLEFT="TOPLEFT",
 		TOPRIGHT="TOPRIGHT",
@@ -62,7 +62,7 @@ function private:CreateHelperFrame()
 		RIGHT="RIGHT",
 		CENTER="CENTER",
 	}
-	
+
 	local BFC = TSMAPI.GUI:GetBuildFrameConstants()
 	local frameInfo = {
 		type = "Frame",
@@ -403,7 +403,8 @@ function private:CreateHelperFrame()
 			},
 		},
 	}
-	private.frame = TSMAPI.GUI:BuildFrame(frameInfo)
+    private.frame = TSMAPI.GUI:BuildFrame(frameInfo)
+    private.frame:EnableMouse(true)
 	private.frame:SetMovable(true)
 	private.frame:SetScale(UIParent:GetScale())
 	TSMAPI.Design:SetFrameBackdropColor(private.frame)
