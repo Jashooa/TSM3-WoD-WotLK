@@ -25,3 +25,18 @@ for (let entry of document.querySelector('.listview-mode-default tbody.clickable
     text += "[\"i:" + id + "\"] = " + cost + ", -- " + name + "\n";
 }
 console.log(text)
+
+// scrape enchanting scroll info
+// https://wotlkdb.com/?items=0.6&filter=cr=86:128:151;crs=11:3:1;crv=0:0:0;ty=6#0+2+1
+text = ""
+for (let entry of document.querySelector('.listview-mode-default tbody.clickable').children) {
+    id = entry.children[0].innerText;
+    name = entry.children[2].innerText;
+
+    url = entry.children[7].querySelector('a').href;
+    pattern = /\?spell=(\d+)/;
+    spellid = pattern.exec(url)[1];
+
+    text += "[" + spellid + "] = \"i:" + id + "\", -- " + name + "\n";
+}
+console.log(text)
