@@ -174,7 +174,7 @@ function Buy:CreateTab(parent)
 				name = "TSMVendoringSearchBar",
 				text = SEARCH,
 				textColor = { 1, 1, 1, 0.5 },
-				size = { 210, 24 },
+				size = { 290, 24 },
 				points = { { "TOPLEFT", 5, -5 } },
 				scripts = { "OnEditFocusGained", "OnEditFocusLost", "OnTextChanged", "OnEnterPressed" },
 			},
@@ -184,11 +184,11 @@ function Buy:CreateTab(parent)
 				name = "VendoringClearFilterBtn",
 				text = L["Clear Filters"],
 				textHeight = 14,
-				size = { 80, 24 },
-				points = { { "TOPLEFT", BFC.PREV, "TOPRIGHT", 5, 0} },
+				size = { nil, 24 },
+				points = { { "TOPLEFT", BFC.PREV, "TOPRIGHT", 5, 0 }, {"TOPRIGHT", -5, -5 }} ,
 				scripts = { "OnClick" },
 			},
-			{
+			--[[{
 				type = "Button",
 				key = "filterBtn",
 				name = "TSMVendoringFilterButton",
@@ -197,7 +197,7 @@ function Buy:CreateTab(parent)
 				size = { nil, 24 },
 				points = { { "TOPLEFT", BFC.PREV, "TOPRIGHT", 5, 0 }, {"TOPRIGHT", -5, -5 }} ,
 				scripts = { "OnClick" },
-			},
+			},]]--
 			{
 				type = "ScrollingTableFrame",
 				key = "buyST",
@@ -255,17 +255,17 @@ function Buy:CreateTab(parent)
 			},
 			clearFilterBtn = {
 				OnClick = function()
-					SetMerchantFilter(1)
+					--SetMerchantFilter(1)
 					private.frame.searchBar:SetText(SEARCH)
 					private.nameFilter = nil
 					private:UpdateBuyST(true)
 				end
 			},
-			filterBtn = {
+			--[[filterBtn = {
 				OnClick = function(self)
 					ToggleDropDownMenu(1, nil, MerchantFrame.lootFilter, "TSMVendoringFilterButton", self:GetWidth(), 0)
 				end
-			},
+			},]]--
 			buyST = {
 				OnClick = function(_, data, self, button)
 					if not data then return end
