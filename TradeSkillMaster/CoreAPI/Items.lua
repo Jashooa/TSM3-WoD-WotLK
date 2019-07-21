@@ -247,10 +247,6 @@ function TSMAPI.Item:IsCraftingReagent(itemLink)
 	return result
 end
 
-function TSMAPI.Item:IsSoulboundMat(itemString)
-	return itemString and TSM.STATIC_DATA.soulboundMats[itemString]
-end
-
 function TSMAPI.Item:GetVendorCost(itemString)
 	return itemString and TSM.db.global.vendorItems[itemString]
 end
