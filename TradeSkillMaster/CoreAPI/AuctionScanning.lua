@@ -594,7 +594,7 @@ function private.GetAllScanThread(self)
 	end
 
 	private:DoCallback("GETALL_QUERY_START")
-	QueryAuctionItems("", nil, nil, 0, 0, 0, 0, 0, 0, true)
+	QueryAuctionItems("", nil, nil, 0, 0, 0, 0, 0, -1, true)
 	self:WaitForEvent("AUCTION_ITEM_LIST_UPDATE")
 	self:WaitForFunction(CanSendAuctionQuery)
 
