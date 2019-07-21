@@ -477,7 +477,7 @@ function private.PostAuctionsThread(self, auctionInfo)
 			end
 		elseif event == "BAG_UPDATE" then
 			-- update the number in the player's bags
-			postInfo.numInBags = TSM.AuctionTabUtil:GetNumInBags(auctionRecord.itemString)
+            postInfo.numInBags = TSM.AuctionTabUtil:GetNumInBags(auctionRecord.itemString)
 			if postInfo.numInBags == 0 or postInfo.isDonePosting then
 				break -- done posting
 			end
@@ -495,21 +495,24 @@ function private.PostAuctionsThread(self, auctionInfo)
 			StartAuction(bid, postInfo.buyout, postInfo.duration, postInfo.stackSize, postInfo.numStacks)
 			private.frame.UpdateConfirmation("progress", nil, L["Posting auctions..."])
 		elseif event == "AUCTION_POSTED" then
-			-- auction was posted so add the records and close the confirmation frame
+            -- auction was posted so add the records and close the confirmation frame
 			local numStacksPosted = unpack(args)
 			local bid = floor(max(postInfo.buyout * TSM.db.global.postBidPercent, 1))
 			local timeLeft = postInfo.duration == 1 and 3 or 4
 			local record = auctionRecord(postInfo.itemLink, auctionRecord.texture, postInfo.stackSize, bid, 0, postInfo.buyout, 0, UnitName("player"), timeLeft, nil, postInfo.rawItemLink)
-			if auctionRecord.isFake then
+            if auctionRecord.isFake then
 				-- remove the fake row
 				private.frame.content.result.rt:RemoveSelectedRecord(1)
-			end
+            end
 			private.frame.content.result.rt:InsertAuctionRecord(numStacksPosted, record)
-			postInfo.isDonePosting = true
+            postInfo.isDonePosting = true
+			if postInfo.isDonePosting then
+				break -- done posting
+			end
 		else
 			error("Unexpected message: " .. tostring(event))
 		end
-	end
+    end
 	self:SendMsgToParent("CONFIRM_DONE")
 end
 
