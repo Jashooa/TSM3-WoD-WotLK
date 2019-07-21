@@ -499,7 +499,7 @@ function private.PostAuctionsThread(self, auctionInfo)
 			local numStacksPosted = unpack(args)
 			local bid = floor(max(postInfo.buyout * TSM.db.global.postBidPercent, 1))
 			local timeLeft = postInfo.duration == 1 and 3 or 4
-			local record = auctionRecord(postInfo.itemLink, auctionRecord.texture, postInfo.stackSize, bid, 0, postInfo.buyout, 0, UnitName("player"), timeLeft, false, postInfo.rawItemLink)
+			local record = auctionRecord(postInfo.itemLink, auctionRecord.texture, postInfo.stackSize, bid, 0, postInfo.buyout, 0, UnitName("player"), timeLeft, nil, postInfo.rawItemLink)
 			if auctionRecord.isFake then
 				-- remove the fake row
 				private.frame.content.result.rt:RemoveSelectedRecord(1)
@@ -1020,7 +1020,7 @@ function private.AuctionTabThread(self)
 				local numInBags = TSM.AuctionTabUtil:GetNumInBags(searchItem)
 				if numInBags > 0 then
 					local _, link, _, _, _, _, _, _, _, texture = TSMAPI.Item:GetInfo(searchItem)
-					local record = TSMAPI.Auction:NewRecord(link, texture, 1, 1, 0, 0, 0, "---", 1, false, link)
+					local record = TSMAPI.Auction:NewRecord(link, texture, 1, 1, 0, 0, 0, "---", 1, nil, link)
 					record.isFake = true
 					private.frame.content.result.rt:InsertAuctionRecord(1, record)
 				end
