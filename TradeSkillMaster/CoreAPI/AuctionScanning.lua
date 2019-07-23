@@ -129,7 +129,7 @@ function TSMAPI.Auction:FindAuctionNoScan(targetInfo)
 	TSMAPI:Assert(type(targetInfo) == "table", "Invalid targetInfo type: "..type(targetInfo))
 	TSMAPI:Assert(AuctionFrame:IsVisible())
 
-	local keys = {"itemString", "stackSize", "displayBid", "buyout", "seller"}
+	local keys = {"itemString", "stackSize", "displayBid", "buyout", "seller", "timeLeft"}
 	for i=#keys, 1, -1 do
 		if not targetInfo[keys[i]] then
 			tremove(keys, i)
@@ -300,11 +300,12 @@ function private:SearchCurrentPageForTargetItem(targetInfo, keys)
 	-- check for the target item on this page
 	local indexList, firstAuction, lastAuction
 	for i=1, GetNumAuctionItems("list") do
-		local stackSize, minBid, buyout, bid, seller = TSMAPI.Util:Select({3, 7, 9, 10, 12}, GetAuctionItemInfo("list", i))
+        local stackSize, minBid, buyout, bid, seller = TSMAPI.Util:Select({3, 7, 9, 10, 12}, GetAuctionItemInfo("list", i))
+        local timeLeft = GetAuctionItemTimeLeft("list", i)
 		seller = TSM:GetAuctionPlayer(seller)
 		local displayedBid = bid == 0 and minBid or bid
 		local itemString = TSMAPI.Item:ToItemString(GetAuctionItemLink("list", i))
-		local auctionData = {itemString=itemString, stackSize=stackSize, displayedBid=displayedBid, buyout=buyout, seller=seller}
+		local auctionData = {itemString=itemString, stackSize=stackSize, displayedBid=displayedBid, buyout=buyout, seller=seller, timeLeft=timeLeft}
 		local isTarget = private:CompareTableKeys(keys, auctionData, targetInfo)
 		if i == 1 then
 			firstAuction = auctionData
