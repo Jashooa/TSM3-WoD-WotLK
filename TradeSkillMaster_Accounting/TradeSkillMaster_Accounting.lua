@@ -16,6 +16,7 @@ TSM.EXPENSE_KEYS = { "type", "amount", "destination", "player", "time" }
 TSM.EXPIRED_KEYS = { "itemString", "stackSize", "quantity", "player", "time" }
 TSM.CANCELLED_KEYS = { "itemString", "stackSize", "quantity", "player", "time" }
 TSM.GOLD_LOG_KEYS = { "startMinute", "endMinute", "copper" }
+TSM.AUCTION_KEYS = { "itemString", "bid", "buyout", "duration", "stackSize", "numStacks", "player", "time" }
 local MAX_CSV_RECORDS = 55000
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_Accounting") -- loads the localization table
 local LibParse = LibStub("LibParse")
@@ -48,7 +49,8 @@ local settingsInfo = {
 		goldGraphCharacter = { type = "string", default = nil, lastModifiedVersion = 1 },
 		goldGraphTimeframe = { type = "number", default = 30, lastModifiedVersion = 1 },
 		goldLog = { type = "table", default = {}, lastModifiedVersion = 1 },
-		trimmed = { type = "table", default = {}, lastModifiedVersion = 1 },
+        trimmed = { type = "table", default = {}, lastModifiedVersion = 1 },
+        csvAuctions = { type = "string", default = "", lastModifiedVersion = 1 },
 	},
 }
 local tooltipDefaults = {
@@ -321,7 +323,7 @@ function TSM:OnTSMDBShutdown()
 	TSM.db.realm.csvSales = LibParse:CSVEncode(TSM.SELL_KEYS, sales)
 	TSM.db.realm.csvBuys = LibParse:CSVEncode(TSM.BUY_KEYS, buys)
 	TSM.db.realm.csvCancelled = LibParse:CSVEncode(TSM.CANCELLED_KEYS, cancels)
-	TSM.db.realm.csvExpired = LibParse:CSVEncode(TSM.EXPIRED_KEYS, expires)
+    TSM.db.realm.csvExpired = LibParse:CSVEncode(TSM.EXPIRED_KEYS, expires)
 
 	-- process income
 	local income = {}
@@ -351,7 +353,14 @@ function TSM:OnTSMDBShutdown()
 			tinsert(expense, record)
 		end
 	end
-	TSM.db.realm.csvExpense = LibParse:CSVEncode(TSM.EXPENSE_KEYS, expense)
+    TSM.db.realm.csvExpense = LibParse:CSVEncode(TSM.EXPENSE_KEYS, expense)
+
+    -- process auctions
+    local auctions = {}
+    for _, record in pairs(TSM.auctions) do
+        tinsert(auctions, record)
+    end
+    TSM.db.realm.csvAuctions = LibParse:CSVEncode(TSM.AUCTION_KEYS, auctions)
 
 	-- process gold log
 	TSM.GoldTracker:LoggingOut()

@@ -64,7 +64,7 @@ function Viewer:Load(parent)
 
 	local tabGroup = AceGUI:Create("TSMTabGroup")
 	tabGroup:SetLayout("Fill")
-	tabGroup:SetTabs({ { text = L["Revenue"], value = 1 }, { text = L["Expenses"], value = 2 }, { text = L["Failed Auctions"], value = 3 }, { text = L["Items"], value = 4 }, { text = L["Summary"], value = 5 }, { text = L["Player Gold"], value = 6 } })
+	tabGroup:SetTabs({ { text = L["Revenue"], value = 1 }, { text = L["Expenses"], value = 2 }, { text = L["Failed Auctions"], value = 3 }, { text = L["Items"], value = 4 }, { text = L["Summary"], value = 5 }, { text = L["Player Gold"], value = 6 }, { text = "Active Auctions", value = 7 } })
 	tabGroup:SetCallback("OnGroupSelected", function(self, _, value)
 		tabGroup:ReleaseChildren()
 		Viewer:HideScrollingTables()
@@ -80,6 +80,8 @@ function Viewer:Load(parent)
 			Viewer.Summary:Draw(self)
 		elseif value == 6 then
 			Viewer.Gold:Draw(self)
+		elseif value == 7 then
+			Viewer.ActiveAuctions:Draw(self)
 		end
 		tabGroup.children[1]:DoLayout()
 	end)
@@ -99,7 +101,7 @@ function Viewer:GetItemFiltersInfo(container, dataType, types, dataFunc, stCols,
 	for i = 1, 4 do
 		rarityList[i] = _G[format("ITEM_QUALITY%d_DESC", i)]
 	end
-	
+
 	local timeList = {[99]=L["All"], [0]=L["Today"], [1]=L["Yesterday"]}
 	for _, days in ipairs({7, 14, 30, 60}) do
 		timeList[days] = format(L["Last %d Days"], days)
@@ -107,14 +109,14 @@ function Viewer:GetItemFiltersInfo(container, dataType, types, dataFunc, stCols,
 
 	local playerList = CopyTable(TSM.ViewerUtil.playerListCache)
 	playerList["all"] = L["All"]
-	
+
 	local typeList = {["all"] = L["All"]}
 	for _, dataType in ipairs(types) do
 		typeList[dataType] = dataType
 	end
-	
+
 	local filters = CopyTable(DEFAULT_FILTERS)
-	
+
 	local stHandlers = nil
 	if tab then
 		stHandlers = {
@@ -135,7 +137,7 @@ function Viewer:GetItemFiltersInfo(container, dataType, types, dataFunc, stCols,
 			end
 		}
 	end
-	
+
 	local page = {
 		{
 			type = "SimpleGroup",
@@ -231,7 +233,7 @@ function Viewer:GetItemFiltersInfo(container, dataType, types, dataFunc, stCols,
 						},
 					},
 				},
-				{ 
+				{
 					type = "ScrollingTable",
 					tag = "TSM_ACCOUNTING_ST_"..dataType,
 					colInfo = stCols,
@@ -255,14 +257,14 @@ function Viewer:GetMoneyFiltersInfo(container, dataType, types, dataFunc, stCols
 
 	local playerList = CopyTable(TSM.ViewerUtil.playerListCache)
 	playerList["all"] = L["All"]
-	
+
 	local typeList = {["all"] = L["All"]}
 	for _, dataType in ipairs(types) do
 		typeList[dataType] = dataType
 	end
-	
+
 	local filters = CopyTable(DEFAULT_FILTERS)
-	
+
 	local stHandlers = nil
 	if tab then
 		stHandlers = {
@@ -278,7 +280,7 @@ function Viewer:GetMoneyFiltersInfo(container, dataType, types, dataFunc, stCols
 			end
 		}
 	end
-	
+
 	local page = {
 		{
 			type = "SimpleGroup",
@@ -335,7 +337,7 @@ function Viewer:GetMoneyFiltersInfo(container, dataType, types, dataFunc, stCols
 						},
 					},
 				},
-				{ 
+				{
 					type = "ScrollingTable",
 					tag = "TSM_ACCOUNTING_ST_"..dataType,
 					colInfo = stCols,
